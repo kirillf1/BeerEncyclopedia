@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8305D651-59EB-46DC-B194-C12F6C8F38AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerEncyclopedia.Domain", "src\BeerEncyclopedia.Domain\BeerEncyclopedia.Domain.csproj", "{B4AD5789-92F8-42F5-8041-3B88E6567145}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerFormaters", "src\BeerFormaters\BeerFormaters.csproj", "{6A134968-EB0F-4295-BCA0-1A9342224ED0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerEncyclopedia.Tests", "src\BeerEncyclopedia.Tests\BeerEncyclopedia.Tests.csproj", "{391E8DD2-274A-4611-8CB4-DF8A76814BF9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4AD5789-92F8-42F5-8041-3B88E6567145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4AD5789-92F8-42F5-8041-3B88E6567145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4AD5789-92F8-42F5-8041-3B88E6567145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4AD5789-92F8-42F5-8041-3B88E6567145}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A134968-EB0F-4295-BCA0-1A9342224ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A134968-EB0F-4295-BCA0-1A9342224ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A134968-EB0F-4295-BCA0-1A9342224ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A134968-EB0F-4295-BCA0-1A9342224ED0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{391E8DD2-274A-4611-8CB4-DF8A76814BF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{391E8DD2-274A-4611-8CB4-DF8A76814BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{391E8DD2-274A-4611-8CB4-DF8A76814BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{391E8DD2-274A-4611-8CB4-DF8A76814BF9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B4AD5789-92F8-42F5-8041-3B88E6567145} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
+		{6A134968-EB0F-4295-BCA0-1A9342224ED0} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
+		{391E8DD2-274A-4611-8CB4-DF8A76814BF9} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DFE09A39-CA3E-4C19-A8E4-20BCD71AD460}
+	EndGlobalSection
+EndGlobal
