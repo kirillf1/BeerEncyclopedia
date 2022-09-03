@@ -26,7 +26,7 @@
         public string? Style { get; set; }
         public double? InitialWort { get; set; }
         public string? Description { get; set; }
-        public Guid? BeerId { get; set; }
+        public Guid? SourceBeerId { get; set; }
         public bool Equals(ShopBeer? other)
         {
             if (other == null)
