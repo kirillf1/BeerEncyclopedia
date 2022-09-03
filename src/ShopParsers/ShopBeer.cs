@@ -7,7 +7,7 @@
             Name = name;
             Price = price;
         }
-        public int ShopId { get; set; }
+        public Guid ShopId { get; set; }
         public string Name { get; set; }
         public string? NameEn { get; set; }
         public string? Color { get; set; }
