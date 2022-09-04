@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerFormaters", "src\BeerFo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerEncyclopedia.Tests", "src\BeerEncyclopedia.Tests\BeerEncyclopedia.Tests.csproj", "{391E8DD2-274A-4611-8CB4-DF8A76814BF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopParsers", "src\ShopParsers\ShopParsers.csproj", "{DF47B64F-29E1-4C89-A7B9-D961C5A928E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopParsers", "src\ShopParsers\ShopParsers.csproj", "{DF47B64F-29E1-4C89-A7B9-D961C5A928E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopBeerService", "src\ShopBeerService\ShopBeerService.csproj", "{6C3614F9-1530-4142-AC39-D7AD70199E5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopBeerService", "src\ShopBeerService\ShopBeerService.csproj", "{6C3614F9-1530-4142-AC39-D7AD70199E5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerShared", "src\BeerShared\BeerShared.csproj", "{484B0084-6144-40AB-B739-713C36DD4E66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{6C3614F9-1530-4142-AC39-D7AD70199E5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C3614F9-1530-4142-AC39-D7AD70199E5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C3614F9-1530-4142-AC39-D7AD70199E5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484B0084-6144-40AB-B739-713C36DD4E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484B0084-6144-40AB-B739-713C36DD4E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484B0084-6144-40AB-B739-713C36DD4E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484B0084-6144-40AB-B739-713C36DD4E66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{391E8DD2-274A-4611-8CB4-DF8A76814BF9} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
 		{DF47B64F-29E1-4C89-A7B9-D961C5A928E8} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
 		{6C3614F9-1530-4142-AC39-D7AD70199E5B} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
+		{484B0084-6144-40AB-B739-713C36DD4E66} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFE09A39-CA3E-4C19-A8E4-20BCD71AD460}

@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BeerShared\BeerShared.csproj" />
     <ProjectReference Include="..\ShopParsers\ShopParsers.csproj" />
   </ItemGroup>
 
