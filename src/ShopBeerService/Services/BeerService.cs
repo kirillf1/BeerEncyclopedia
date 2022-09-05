@@ -33,10 +33,11 @@ namespace ShopBeerService.Services
                 query = query.Where(c => shopBeerQuery.HasSourceBeer.Value ? c.SourceBeerId != null : c.SourceBeerId == null);
             var count = await query.CountAsync();
             return new ApiResult<ShopBeerInfo>(await query.
-                Select(b => ShopBeerToInfo(b)).
+                OrderBy(c => c.Name).
                 Skip(shopBeerQuery.PageIndex * shopBeerQuery.PageSize).
                 Take(shopBeerQuery.PageSize).
-                OrderBy(c => c.Name).ToListAsync(),
+                Select(b => ShopBeerToInfo(b)).
+                ToListAsync(),
                 count, shopBeerQuery.PageIndex, shopBeerQuery.PageSize);
         }
         public async Task AddBeer(ShopBeer beer)
