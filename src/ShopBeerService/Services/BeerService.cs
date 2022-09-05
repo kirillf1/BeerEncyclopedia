@@ -54,10 +54,14 @@ namespace ShopBeerService.Services
             context.Entry(shopBeer).State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
-        public async Task DeleteBeer(Guid? shopId,string name)
+        public async Task DeleteBeer(Guid? shopId, string name)
         {
             var beer = await beers.FirstOrDefaultAsync(c => c.ShopId == shopId && c.Name == name);
-            await context.SaveChangesAsync();
+            if (beer is not null)
+            {
+                beers.Remove(beer);
+                await context.SaveChangesAsync();
+            }
         }
         public static ShopBeerInfo ShopBeerToInfo(ShopBeer beer)
         {
