@@ -36,8 +36,28 @@ namespace ShopBeerService.Services
                 Select(b => ShopBeerToInfo(b)).
                 Skip(shopBeerQuery.PageIndex * shopBeerQuery.PageSize).
                 Take(shopBeerQuery.PageSize).
-                OrderBy(c=>c.Name).ToListAsync(),
+                OrderBy(c => c.Name).ToListAsync(),
                 count, shopBeerQuery.PageIndex, shopBeerQuery.PageSize);
+        }
+        public async Task AddBeer(ShopBeer beer)
+        {
+            await beers.AddAsync(beer);
+            await context.SaveChangesAsync();
+        }
+        public async Task AddBeers(IEnumerable<ShopBeer> beerCollection)
+        {
+            await beers.AddRangeAsync(beerCollection);
+            await context.SaveChangesAsync();
+        }
+        public async Task UpdateBeer(ShopBeer shopBeer)
+        {
+            context.Entry(shopBeer).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+        public async Task DeleteBeer(Guid? shopId,string name)
+        {
+            var beer = await beers.FirstOrDefaultAsync(c => c.ShopId == shopId && c.Name == name);
+            await context.SaveChangesAsync();
         }
         public static ShopBeerInfo ShopBeerToInfo(ShopBeer beer)
         {
