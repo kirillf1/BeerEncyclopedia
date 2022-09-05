@@ -20,5 +20,11 @@ namespace ShopBeerService.Controllers
         {
             return await beerService.GetShopBeers(shopBeerQuery);
         }
+        [HttpDelete]
+        public async Task<ActionResult> Remove([FromQuery] Guid? shopId, [FromQuery] string beerName)
+        {
+            await beerService.DeleteBeer(shopId, beerName);
+            return Ok();
+        }
     }
 }
