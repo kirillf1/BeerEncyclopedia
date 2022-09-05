@@ -3,7 +3,7 @@ namespace BeerShared.DTO
 {
     public class ShopBeerInfo
     {
-        public string? ShopName { get; set; }
+        public Guid? ShopId { get; set; }
         public string Name { get; set; } = default!;
         public string? NameEn { get; set; }
         public string? Color { get; set; }
