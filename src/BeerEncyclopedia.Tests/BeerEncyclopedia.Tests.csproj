@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BeerFormaters\BeerFormaters.csproj" />
+    <ProjectReference Include="..\ShopBeerService\ShopBeerService.csproj" />
   </ItemGroup>
 
 </Project>
