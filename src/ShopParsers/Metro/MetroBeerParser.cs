@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.Extensions.Logging;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 namespace ShopParsers.Metro
@@ -6,10 +7,12 @@ namespace ShopParsers.Metro
     public class MetroBeerParser : IDisposable
     {
         private readonly IWebDriver webDriver;
+        private readonly ILogger logger;
         private Random random;
-        public MetroBeerParser(IWebDriver webDriver)
+        public MetroBeerParser(IWebDriver webDriver,ILogger logger)
         {
             this.webDriver = webDriver;
+            this.logger = logger;
             random = new();
             ConfigurePage();
         }
@@ -38,8 +41,7 @@ namespace ShopParsers.Metro
         {
             webDriver.Navigate().GoToUrl("https://online.metro-cc.ru/category/alkogolnaya-produkciya/pivo-sidr?order=popularity_desc&attributes=304%3Asteklo-304,zhb-304,alyuminievaya-banka-304" +
                 $"&page={page}");
-            var wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(60));
-            wait.Until(drv => drv.FindElement(By.XPath("//main")));
+            WaitUntil(webDriver, "//main", 60);
             var urls = GetDetailsUrls();
             var canNext = webDriver.FindElements(By.XPath("//ul[contains(@class,'catalog-paginate')]/li[last()]/a/*[local-name() = 'svg']")).Any();
             foreach (var url in urls)
@@ -51,7 +53,7 @@ namespace ShopParsers.Metro
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Cant parse beer: " + ex.Message);
+                    logger.LogWarning("Cant parse beer on url: {url}, error message: {message}", url, ex.Message);
                 }
             }
             return canNext;
@@ -65,10 +67,9 @@ namespace ShopParsers.Metro
         private ShopBeer ParseDetailsPage(string url)
         {
             webDriver.Navigate().GoToUrl(url);
-            var wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(60));
-            wait.Until(drv => drv.FindElement(By.XPath("//h1[contains(@class,'title')]")));
+            WaitUntil(webDriver, "//h1[contains(@class,'title')]",60);
             var name = webDriver.GetName();
-            wait.Until(drv => drv.FindElement(By.XPath("//aside[contains(@class,'product__aside')]")));
+            WaitUntil(webDriver, "//aside[contains(@class,'product__aside')]", 60);
             var priceElement = webDriver.FindElement(By.XPath("//aside[contains(@class,'product__aside')]"));
             var isAvalible = !priceElement.FindElements(By.XPath(".//div[contains(@class,'out-of-stocks')]")).Any();
             decimal price = 0;
@@ -77,7 +78,7 @@ namespace ShopParsers.Metro
             {
                 priceElement.GetPrice(out price, out discountPrice);
             }
-            wait.Until(drv => drv.FindElement(By.XPath("//section[contains(@class,'additional-block')]")));
+            WaitUntil(webDriver, "//section[contains(@class,'additional-block')]", 60);
             var brand = webDriver.GetBrand();
             var volume = webDriver.GetVolume();
             var filtration = webDriver.GetFiltration();
@@ -98,7 +99,6 @@ namespace ShopParsers.Metro
                 IsAvailable = isAvalible,
                 Pasteurization = pasterization
             };
-            Console.WriteLine($"added: {beer.Name} {beer.Volume} {country}, f:{filtration}, pz:{pasterization} p:{price}, av:{isAvalible} br:{brand}");
             return beer;
         }
         public void SetNewStore(int id)
@@ -108,8 +108,7 @@ namespace ShopParsers.Metro
         private void ConfigurePage()
         {
             webDriver.Navigate().GoToUrl("https://online.metro-cc.ru");
-            var wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(60));
-            wait.Until(drv => drv.FindElement(By.XPath("//*[@id=\"__layout\"]")));
+            WaitUntil(webDriver, "//*[@id=\"__layout\"]", 60);
             var cookies = webDriver.Manage().Cookies;
             var ageCookie = cookies.GetCookieNamed("18ageConfirm");
             cookies.AddCookie(ChangeCookieValue(ageCookie, "true"));
@@ -120,6 +119,11 @@ namespace ShopParsers.Metro
         {
             return new Cookie(oldCookie.Name, value, oldCookie.Domain, oldCookie.Path,
                 oldCookie.Expiry, oldCookie.Secure, oldCookie.IsHttpOnly, oldCookie.SameSite);
+        }
+        private static void WaitUntil(IWebDriver webDriver,string xPath,int seconds)
+        {
+            var wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(seconds));
+            wait.Until(drv => drv.FindElement(By.XPath(xPath)));
         }
         public void Dispose()
         {
