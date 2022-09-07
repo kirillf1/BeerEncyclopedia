@@ -6,6 +6,7 @@ namespace ShopParsers.Metro
 {
     public class MetroBeerParser : IDisposable
     {
+        public const string MetroBeerUrl = "https://online.metro-cc.ru/category/alkogolnaya-produkciya/pivo-sidr?order=popularity_desc&attributes=304%3Asteklo-304,zhb-304,alyuminievaya-banka-304";
         private readonly IWebDriver webDriver;
         private readonly ILogger logger;
         private Random random;
@@ -16,6 +17,16 @@ namespace ShopParsers.Metro
             random = new();
             ConfigurePage();
         }
+        public int GetTotalPages()
+        {
+            webDriver.Navigate().GoToUrl(MetroBeerUrl);
+            WaitUntil(webDriver, "//div[contains(@id,'products-inner')]", 10);
+            var hasPagination = webDriver.FindElements(By.XPath("//ul[contains(@class,'catalog-paginate')]")).Any();
+            if (!hasPagination)
+                return 1;
+            var pageElement = webDriver.FindElement(By.XPath("//ul[contains(@class,'catalog-paginate')]/li[last()-1]/a"));
+            return int.Parse(pageElement.Text);
+        } 
         public async Task<IEnumerable<ShopBeer>> ParseBeers()
         {
             var beerList = new List<ShopBeer>();
@@ -39,7 +50,7 @@ namespace ShopParsers.Metro
         /// <returns>If can next true</returns>
         private async Task<bool> GetBeersPerPage(int page, List<ShopBeer> shopBeers)
         {
-            webDriver.Navigate().GoToUrl("https://online.metro-cc.ru/category/alkogolnaya-produkciya/pivo-sidr?order=popularity_desc&attributes=304%3Asteklo-304,zhb-304,alyuminievaya-banka-304" +
+            webDriver.Navigate().GoToUrl(MetroBeerUrl +
                 $"&page={page}");
             WaitUntil(webDriver, "//main", 60);
             var urls = GetDetailsUrls();
