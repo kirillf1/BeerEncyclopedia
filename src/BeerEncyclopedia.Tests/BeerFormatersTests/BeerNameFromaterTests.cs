@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BeerEncyclopedia.Tests.BeerFormatersTests
 {
-    public class BeerNameFromaterTests
+    public class BeerNameFormaterTests
     {
         [Theory]
         [InlineData("Пиво Schlitz Вайсбир светлое пастеризованное нефильтрованное 5.2%", "Schlitz Вайсбир")]
