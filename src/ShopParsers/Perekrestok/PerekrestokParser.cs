@@ -11,6 +11,7 @@ namespace ShopParsers.Perekrestok
     ////https://www.perekrestok.ru/api/customer/1.4.1.0/delivery/mode/pickup/628 - put чтобы изменить локацию
     public class PerekrestokParser : IDisposable
     {
+        public const string URL = "https://www.perekrestok.ru";
         private HttpClient httpClient;
         private SocketsHttpHandler clientHandler;
         private const int categoryId = 9;
@@ -72,14 +73,14 @@ namespace ShopParsers.Perekrestok
         }
         private async Task Authenticate()
         {
-            clientHandler.CookieContainer.Add(new Uri("https://www.perekrestok.ru"), new Cookie("agreements", HttpUtility.UrlEncode("j:{\"isCookieAccepted\":false,\"isAdultContentEnabled\":true,\"isAppAppInstallPromptClosed\":false}")));
-            var emptyResponse = await httpClient.GetAsync("https://www.perekrestok.ru");
+            clientHandler.CookieContainer.Add(new Uri(URL), new Cookie("agreements", HttpUtility.UrlEncode("j:{\"isCookieAccepted\":false,\"isAdultContentEnabled\":true,\"isAppAppInstallPromptClosed\":false}")));
+            var emptyResponse = await httpClient.GetAsync(URL);
             if (!emptyResponse.IsSuccessStatusCode)
             {
                 throw new HttpRequestException($"Connection to perekrestok failed with code {(int)emptyResponse.StatusCode}");
             }
             var cookies = clientHandler.CookieContainer
-                               .GetCookies(new Uri("https://www.perekrestok.ru"));
+                               .GetCookies(new Uri(URL));
             var sessionCookie = cookies.First(c => c.Name == "session");
             var sessionValue = HttpUtility.UrlDecode(sessionCookie.Value);
             httpClient.DefaultRequestHeaders.Add("Auth", $"Bearer {GetBearerFromSession(sessionValue)}");
@@ -92,7 +93,7 @@ namespace ShopParsers.Perekrestok
             httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
             httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Chromium\";v=\"104\", \" Not A;Brand\";v=\"99\", \"Google Chrome\";v=\"104\"");
             httpClient.DefaultRequestHeaders.Add("accept-language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7");
-            httpClient.DefaultRequestHeaders.Add("Origin", "https://www.perekrestok.ru");
+            httpClient.DefaultRequestHeaders.Add("Origin", URL);
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");
             httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
             httpClient.DefaultRequestHeaders.Add("Host", "www.perekrestok.ru");
