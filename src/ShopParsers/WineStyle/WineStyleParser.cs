@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -8,7 +9,7 @@ namespace ShopParsers.WineStyle
     public class WineStyleParser : IDisposable
     {
         private readonly HttpClient client;
-        public WineStyleParser(IWebProxy webProxy)
+        public WineStyleParser(IWebProxy webProxy, ILogger logger)
         {
             var handler = new SocketsHttpHandler()
             {
@@ -16,19 +17,22 @@ namespace ShopParsers.WineStyle
             };
             client = new HttpClient(handler);
             ConfigureHttpClient(client);
+            this.logger = logger;
         }
-        public WineStyleParser()
+        public WineStyleParser(ILogger logger)
         {
             client = new HttpClient();
             ConfigureHttpClient(client);
+            this.logger = logger;
         }
+        private ILogger logger { get; }
         public async Task<IEnumerable<ShopBeer>> ParseBeers(int start, int end, int offset = 100)
         {
             var beers = new List<ShopBeer>();
 
             while (start < end)
             {
-                Console.WriteLine($"Parse {start}-{start + offset}");
+                logger.LogInformation("Parse {start}-{end}",start, start + offset);
                 var html = await GetHtml(start, start + offset);
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(html);
@@ -54,10 +58,10 @@ namespace ShopParsers.WineStyle
                         beers.Add(new ShopBeer(title, price)
                         {
                             Volume = volume,
-                            Country = location.Country,
+                            Country = location?.Country,
                             Manufacturer = manufacturer,
-                            Color = beerColumn.Color,
-                            Filtration = beerColumn.Filtraion,
+                            Color = beerColumn?.Color,
+                            Filtration = beerColumn?.Filtraion,
                             Pasteurization = beerColumn.Pasteurization,
                             DetailsUrl = detailsUrl,
                             Brand = brand,
@@ -69,8 +73,7 @@ namespace ShopParsers.WineStyle
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Parsing beer failed. Message: {ex.Message}");
-                        continue;
+                       logger.LogWarning("Parsing beer failed. Page: {page}. Message: {message}",start,ex.Message);
                     }
                 }
                 start += offset;
@@ -81,8 +84,6 @@ namespace ShopParsers.WineStyle
         {
             var url = "https://winestyle.ru//remote.php?r=0.3391295572713491&w=loadcatalogproducts&nodesurl=%2Fbeer%2F250ml%2F300ml%2F320ml%2F330ml%2F333ml%2F350ml%2F355ml%2F375ml%2F400ml%2F410ml%2F425ml%2F430ml%2F440ml%2F450ml%2F460ml%2F470ml%2F473ml%2F480ml%2F490ml%2F500ml%2F550ml%2F568ml%2F580ml%2F600ml%2F610ml%2F620ml%2F630ml%2F640ml%2F650ml%2F660ml%2F700ml%2F710ml%2F750ml_ll%2F&sort=popularityASC&" +
         $"start={start}&end={end}&capacityfilter=0&group_tab_id=0";
-
-            Console.WriteLine($"{start} - {end} started");
             var response = await client.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {

@@ -12,12 +12,14 @@ namespace ShopParsers.WineStyle
             return htmlNode.SelectSingleNode(".//a[contains(@itemprop,'url')]").InnerText;
         }
         public record Location(string Country, string? Region);
-        public static Location GetLocation(this HtmlNode htmlNode)
+        public static Location? GetLocation(this HtmlNode htmlNode)
         {
             var locationRaw = htmlNode.
-                SelectSingleNode(".//li[contains(.,'Регион')]").
-                SelectNodes(".//a").
+                SelectSingleNode(".//li[contains(.,'Регион')]")?.
+                SelectNodes(".//a")?.
                 Select(c => c.InnerText).ToArray();
+            if (locationRaw == null || locationRaw.Length == 0)
+                return null;
             var country = locationRaw[0];
             var region = locationRaw.Length >= 2 ? locationRaw[1] : null;
             return new Location(country, region);
@@ -44,29 +46,31 @@ namespace ShopParsers.WineStyle
                SelectSingleNode(".//li[contains(.,'Бренд')]")?.
                SelectSingleNode(".//a")?.InnerText;
         }
-        public static string GetDetailsUrl(this HtmlNode htmlNode)
+        public static string? GetDetailsUrl(this HtmlNode htmlNode)
         {
             return "https://winestyle.ru" + htmlNode.
-                SelectSingleNode(".//a[@itemprop='url']").
-                Attributes.First(c => c.Name == "href").Value;
+                SelectSingleNode(".//a[@itemprop='url']")?.
+                Attributes.First(c => c.Name == "href")?.Value;
         }
         public record BeerColumn(string Color, bool Filtraion, bool Pasteurization);
-        public static BeerColumn GetBeerColumn(this HtmlNode htmlNode)
+        public static BeerColumn? GetBeerColumn(this HtmlNode htmlNode)
         {
             var columnRaw = htmlNode.
-              SelectSingleNode(".//li[contains(.,'Пиво')]").
-              SelectNodes(".//a").
-              Select(c => c.InnerText).ToArray();
+              SelectSingleNode(".//li[contains(.,'Пиво')]")?.
+              SelectNodes(".//a")?.
+              Select(c => c.InnerText)?.ToArray();
+            if (columnRaw == null || columnRaw.Length == 0)
+                return null;
             var color = columnRaw[0];
             var filtration = columnRaw.Skip(1).Any(c => c.Equals("фильтрованное", StringComparison.OrdinalIgnoreCase));
             var pasterilisation = !columnRaw.Skip(1).Any(c => c.Equals("Живое", StringComparison.OrdinalIgnoreCase));
             return new BeerColumn(color, filtration, pasterilisation);
         }
-        public static string GetManufacturer(this HtmlNode htmlNode)
+        public static string? GetManufacturer(this HtmlNode htmlNode)
         {
             return htmlNode.
-               SelectSingleNode(".//li[contains(.,'Производитель')]")
-               .SelectNodes(".//a").First().InnerText;
+               SelectSingleNode(".//li[contains(.,'Производитель')]")?
+               .SelectNodes(".//a").First()?.InnerText;
         }
         public static string? GetStyle(this HtmlNode htmlNode)
         {

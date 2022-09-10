@@ -10,6 +10,7 @@ namespace ShopParsers.Lenta
     ///api/v1/search?value= - поиск по названию
     public class LentaBeerParser : IDisposable
     {
+        public const string URL = "https://lenta.com";
         private const string lentaBeerUrl = "https://lenta.com/catalog/alkogolnye-napitki/pivo-i-slabyjj-alkogol";
         private static readonly Dictionary<LentaBeerCategory, string> categoryPaths;
         static LentaBeerParser()
@@ -23,6 +24,7 @@ namespace ShopParsers.Lenta
             categoryPaths[LentaBeerCategory.Taste] = "vkusovoe-pivo";
 
         }
+        private readonly Dictionary<LentaBeerCategory, int> maxPagesInCategory = new();
         private readonly HttpClient httpClient;
         private readonly SocketsHttpHandler httpHandler;
         private Random random = new Random();
@@ -57,7 +59,7 @@ namespace ShopParsers.Lenta
                 var page = 1;
                 while (canNext)
                 {
-                    canNext = await ParsePerPage(beers, $"{lentaBeerUrl}/{path}/?page={page}");
+                    canNext = await ParsePerPage(beers, $"{lentaBeerUrl}/{path}/?page={page}",category);
                     page++;
                     await Task.Delay(random.Next(5000, 10000));
                 }
@@ -68,22 +70,20 @@ namespace ShopParsers.Lenta
         {
             var beers = new List<ShopBeer>();
             var path = categoryPaths[lentaBeerCategory];
-            await ParsePerPage(beers, $"{lentaBeerUrl}/{path}/?page={page}");
+            await ParsePerPage(beers, $"{lentaBeerUrl}/{path}/?page={page}",lentaBeerCategory);
             return beers;
         }
         public async Task<int> GetPageCount(LentaBeerCategory lentaBeerCategory)
         {
+            if (maxPagesInCategory.TryGetValue(lentaBeerCategory,out var pages))
+                return pages;
             var path = categoryPaths[lentaBeerCategory];
             var html = await GetLentaShopHtml($"{lentaBeerUrl}/{path}");
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(html);
-            if (string.IsNullOrEmpty(html))
-                return 0;
-            var pageString = htmlDoc.DocumentNode.SelectSingleNode("//li[@class='pagination__item'][last()]/a").InnerText;
-            int.TryParse(pageString, out var page);
-            return page;
+            pages = TryGetPageCountFromHtml(html);
+            maxPagesInCategory[lentaBeerCategory] = pages;
+            return pages;
         }
-        private async Task<bool> ParsePerPage(List<ShopBeer> beers, string url)
+        private async Task<bool> ParsePerPage(List<ShopBeer> beers, string url,LentaBeerCategory lentaBeerCategory)
         {
             var html = await GetLentaShopHtml(url);
             var htmlDoc = new HtmlDocument();
@@ -92,6 +92,9 @@ namespace ShopParsers.Lenta
                 return false;
             beers.AddRange(ParseByCategory(htmlDoc.DocumentNode));
             var nextNode = htmlDoc.DocumentNode.SelectSingleNode("//li[@class='next']");
+            var pages = TryGetPageCountFromHtml(html);
+            if (pages > 0)
+                maxPagesInCategory[lentaBeerCategory] = pages; 
             return nextNode is not null;
         }
         private async Task<string> GetLentaShopHtml(string url)
@@ -103,7 +106,7 @@ namespace ShopParsers.Lenta
                 response = await httpClient.GetAsync(url);
             }
             if (!response.IsSuccessStatusCode)
-                throw new Exception("error with code " + response.StatusCode.ToString());
+                throw new Exception("Error with code " + response.StatusCode.ToString());
             return await response.Content.ReadAsStringAsync();
         }
         private static IEnumerable<ShopBeer> ParseByCategory(HtmlNode html)
@@ -134,25 +137,42 @@ namespace ShopParsers.Lenta
                 DiscountPrice = (decimal)dataModel.CardPrice.Value,
             };
         }
-        public static void AddHeaders(HttpClient httpClient)
+        /// <summary>
+        /// ParseHtml document and try get pages
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns>if can't find paginator returns -1 else page count</returns>
+        private static int TryGetPageCountFromHtml(string html)
+        {
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(html);
+            if (string.IsNullOrEmpty(html))
+                return 0;
+            var pageString = htmlDoc.DocumentNode.SelectSingleNode("//li[@class='pagination__item'][last()]/a").InnerText;
+            if (!int.TryParse(pageString, out var page))
+                return -1;
+            return page;
+        }
+        private static void AddHeaders(HttpClient httpClient)
         {
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36");
             httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
             httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Chromium\";v=\"104\", \" Not A;Brand\";v=\"99\", \"Google Chrome\";v=\"104\"");
             httpClient.DefaultRequestHeaders.Add("accept-language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7");
-            httpClient.DefaultRequestHeaders.Add("Origin", "https://lenta.com");
+            httpClient.DefaultRequestHeaders.Add("Origin", URL);
             httpClient.Timeout = TimeSpan.FromSeconds(30);
         }
         private static void ConfigureCookie(SocketsHttpHandler handler, string shopId)
         {
-            handler.CookieContainer.Add(new Uri("https://lenta.com"), new Cookie("Store", shopId));
-            handler.CookieContainer.Add(new Uri("https://lenta.com"), new Cookie("DeliveryOptions", "Pickup"));
-            handler.CookieContainer.Add(new Uri("https://lenta.com"), new Cookie("ShouldSetDeliveryOptions", "False"));
-            handler.CookieContainer.Add(new Uri("https://lenta.com"), new Cookie("IsAdult", "True"));
-            handler.CookieContainer.Add(new Uri("https://lenta.com"), new Cookie("CityCookie", "true"));
-            handler.CookieContainer.Add(new Uri("https://lenta.com"), new Cookie("DontShowCookieNotification", "true"));
+            handler.CookieContainer.Add(new Uri(URL), new Cookie("Store", shopId));
+            handler.CookieContainer.Add(new Uri(URL), new Cookie("DeliveryOptions", "Pickup"));
+            handler.CookieContainer.Add(new Uri(URL), new Cookie("ShouldSetDeliveryOptions", "False"));
+            handler.CookieContainer.Add(new Uri(URL), new Cookie("IsAdult", "True"));
+            handler.CookieContainer.Add(new Uri(URL), new Cookie("CityCookie", "true"));
+            handler.CookieContainer.Add(new Uri(URL), new Cookie("DontShowCookieNotification", "true"));
         }
 
+        public static IEnumerable<LentaBeerCategory> GetLentaBeerCategories() => categoryPaths.Keys;
         public void Dispose()
         {
             httpHandler.Dispose();
