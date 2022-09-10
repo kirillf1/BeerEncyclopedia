@@ -5,7 +5,7 @@ namespace ShopBeerService.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            serviceCollection.AddDbContext<ShopBeerPGDbContext>(o=>o.UseNpgsql(configuration.GetConnectionString("PGConnectionString")));
+            serviceCollection.AddDbContextFactory<ShopBeerPGDbContext>(o=>o.UseNpgsql(configuration.GetConnectionString("PGConnectionString")));
             return serviceCollection;
         }
     }
