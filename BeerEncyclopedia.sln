@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerEncyclopedia.Infrastruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerEncyclopedia.Application", "src\BeerEncyclopedia.Application\BeerEncyclopedia.Application.csproj", "{F6B519F8-D545-4673-B2C7-C8E91C950FDB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerEncyclopedia.API", "src\BeerEncyclopedia.API\BeerEncyclopedia.API.csproj", "{D9949466-E8D5-466A-ADA0-D3FE8A485615}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{F6B519F8-D545-4673-B2C7-C8E91C950FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6B519F8-D545-4673-B2C7-C8E91C950FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6B519F8-D545-4673-B2C7-C8E91C950FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9949466-E8D5-466A-ADA0-D3FE8A485615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9949466-E8D5-466A-ADA0-D3FE8A485615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9949466-E8D5-466A-ADA0-D3FE8A485615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9949466-E8D5-466A-ADA0-D3FE8A485615}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{484B0084-6144-40AB-B739-713C36DD4E66} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
 		{5F1F6444-A4D2-4C78-8FF3-3957461A73A4} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
 		{F6B519F8-D545-4673-B2C7-C8E91C950FDB} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
+		{D9949466-E8D5-466A-ADA0-D3FE8A485615} = {8305D651-59EB-46DC-B194-C12F6C8F38AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFE09A39-CA3E-4C19-A8E4-20BCD71AD460}
