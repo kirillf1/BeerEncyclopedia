@@ -3,12 +3,12 @@ namespace BeerEncyclopedia.Domain
 {
     public class Beer
     {
-        public Beer(Guid id, string name,string url, ChemicalIndicators chemicalIndicators, OrganolepticIdicators organolepticIdicators)
+        public Beer(Guid id, string name,string url, ChemicalIndicators chemicalIndicators, OrganolepticIndicators organolepticIdicators)
         {
             Id = id;
             Name = name;
             ChemicalIndicators = chemicalIndicators;
-            OrganolepticIdicators = organolepticIdicators;
+            OrganolepticIndicators = organolepticIdicators;
             Manufacturers = new List<Manufacturer>();
             BeerImages = new BeerImages(url);
             Rating = 0;
@@ -26,7 +26,7 @@ namespace BeerEncyclopedia.Domain
         public double Rating { get; set; }
         public DateTime? CreationTime { get; set; }
         public ChemicalIndicators ChemicalIndicators { get; set; }
-        public OrganolepticIdicators OrganolepticIdicators { get; set; }
+        public OrganolepticIndicators OrganolepticIndicators { get; set; }
         public List<Manufacturer> Manufacturers { get; set; }
     }
 }
