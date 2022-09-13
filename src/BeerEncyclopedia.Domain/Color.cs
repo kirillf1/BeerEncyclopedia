@@ -2,10 +2,13 @@
 {
     public class Color
     {
-        public Color(string name)
+        public Color(Guid id,string name)
         {
+            Id = id;
             Name = name;
         }
+
+        public Guid Id { get; }
         public string Name { get; set; }
     }
 }

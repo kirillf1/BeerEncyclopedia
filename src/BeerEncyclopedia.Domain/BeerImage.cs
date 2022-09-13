@@ -2,6 +2,7 @@
 {
     public class BeerImages
     {
+        private BeerImages() { }
         public BeerImages(string url)
         {
             MainImageUrl = url;
