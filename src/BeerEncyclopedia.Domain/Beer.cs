@@ -14,13 +14,11 @@ namespace BeerEncyclopedia.Domain
             Rating = 0;
             Styles = new List<Style>();
         }
-
         public Guid Id { get; }
         public BeerImages BeerImages { get; set; }
         public string Name { get; set; }
         public string? NameRus { get; set; }
         public Country? Country { get; set; }
-        public Brand? Brand { get; set; }
         public List<Style> Styles { get; set; } 
         public string? Description { get; set; }
         public double Rating { get; set; }

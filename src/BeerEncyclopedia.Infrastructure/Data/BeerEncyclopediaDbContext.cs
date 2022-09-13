@@ -10,6 +10,5 @@ namespace BeerEncyclopedia.Infrastructure.Data
         public abstract DbSet<Country> Countries { get; }
         public abstract DbSet<Style> Styles { get; }
         public abstract DbSet<Manufacturer> Manufacturers { get; }
-        public abstract DbSet<Brand> Brands { get; }
     }
 }
