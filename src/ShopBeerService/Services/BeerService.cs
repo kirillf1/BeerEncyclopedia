@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ShopBeerService.Infrastructure;
 using ShopBeerService.Queries;
 using ShopParsers;
+using System.Text.RegularExpressions;
 
 namespace ShopBeerService.Services
 {
@@ -20,7 +21,12 @@ namespace ShopBeerService.Services
         {
             IQueryable<ShopBeer> query = beers.AsNoTracking();
             if (shopBeerQuery.Name is not null)
-                query = query.Where(c => EF.Functions.ILike(c.Name, $"%{shopBeerQuery.Name}%"));
+            {
+                var nameSplited = shopBeerQuery.Name.Split(' ');
+                var regexPattern = $"{string.Join(@".*", nameSplited.Select(s=>$@"(\y{s}\y)"))}";
+                //EF.Functions.ILike(c.Name, $"%{shopBeerQuery.Name}%"
+                query = query.Where(c => Regex.IsMatch(c.Name,regexPattern,RegexOptions.IgnoreCase));
+            }
             if (shopBeerQuery.PriceMax.HasValue)
                 query = query.Where(c => c.Price < shopBeerQuery.PriceMax.Value);
             if (shopBeerQuery.PriceMin.HasValue)
@@ -68,6 +74,7 @@ namespace ShopBeerService.Services
         {
             return new ShopBeerInfo
             {
+                Id = beer.Id,
                 Brand = beer.Brand,
                 Description = beer.Description,
                 ShopId = beer.ShopId,

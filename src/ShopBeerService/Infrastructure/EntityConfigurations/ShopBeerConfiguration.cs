@@ -8,10 +8,9 @@ namespace ShopBeerService.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<ShopBeer> builder)
         {
-            builder.Property<int>("Id")
-                .HasColumnType("int")
+            builder.Property(b=>b.Id)
                 .ValueGeneratedOnAdd();
-            builder.HasKey("Id");
+            builder.HasKey(b=>b.Id);
             builder.HasIndex(c => c.Name);
         }
     }
