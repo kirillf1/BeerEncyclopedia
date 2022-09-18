@@ -1,15 +1,16 @@
 ﻿namespace ShopParsers
 {
-    public class ShopBeer : IEquatable<ShopBeer>
+    public class ShopBeer
     {
         public ShopBeer(string name, decimal price)
         {
             Name = name;
             Price = price;
         }
+        public int Id { get; set; }
         public Guid ShopId { get; set; }
         public string Name { get; set; }
-        public string? NameEn { get; set; }
+        public string FormatedName { get; set; } = "";
         public string? Color { get; set; }
         public string? Manufacturer { get; set; }
         public double? Volume { get; set; }
@@ -27,18 +28,6 @@
         public double? InitialWort { get; set; }
         public string? Description { get; set; }
         public Guid? SourceBeerId { get; set; }
-        public bool Equals(ShopBeer? other)
-        {
-            if (other == null)
-                return false;
-            return Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase) && ShopId == other.ShopId;
-        }
-
-        public override bool Equals(object obj) => Equals(obj as ShopBeer);
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode() + ShopId.GetHashCode();
-        }
+       
     }
 }
