@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BeerFormaters.BeerNameFormater;
+using Cyrillic.Convert;
+using Microsoft.EntityFrameworkCore;
 using ShopBeerService.Infrastructure;
 using ShopParsers;
 
@@ -32,6 +34,7 @@ namespace ShopBeerService.Workers
                     var shop = await GetShopWithBeers(context, beerShopServiceArgs.ShopName);
                     if (shop is null)
                     {
+                        AddFormatedNameToBeers(beers);
                         shop = new Shop(Guid.NewGuid(), beerShopServiceArgs.ShopName, beers);
                         context.Add(shop);
                     }
@@ -44,12 +47,14 @@ namespace ShopBeerService.Workers
                         {
                             TransferChangingBeerProperties(beer.newBeer, beer.oldBeer);
                         }
-                        shop.ShopBeers.AddRange(beers.Except(existedBeers.Select(c => c.newBeer)));
+                        var notIncludedBeers = beers.Except(existedBeers.Select(c => c.newBeer));
+                        AddFormatedNameToBeers(notIncludedBeers);
+                        shop.ShopBeers.AddRange(notIncludedBeers);
                     }
                     await context.SaveChangesAsync(stoppingToken);
                     logger.LogInformation("Parsing ended. Finded {count} beers in shop", beers.Count);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.LogError("Parsing failed with error: {ex}", ex.Message);
                 }
@@ -85,6 +90,16 @@ namespace ShopBeerService.Workers
                     else
                         yield return (int)Math.Floor(result);
                 }
+            }
+        }
+        private static void AddFormatedNameToBeers(IEnumerable<ShopBeer> shopBeers)
+        {
+            var formater = new BeerNameFormater();
+            var conversion = new Conversion();
+            foreach (var beer in shopBeers)
+            {
+                var nameWithoutExtra = formater.Format(beer.Name).Name;
+                beer.FormatedName = conversion.RussianCyrillicToLatin(nameWithoutExtra);
             }
         }
         protected void TransferChangingBeerProperties(ShopBeer shopBeerNew, ShopBeer shopBeerOld)
