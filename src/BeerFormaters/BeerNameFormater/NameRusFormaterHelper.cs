@@ -33,7 +33,7 @@ namespace BeerFormaters.BeerNameFormater
         public static bool TryRetrivePasteurization(out string? pasteurization, string name)
         {
             pasteurization = null;
-            var match = Regex.Match(name, "(не)?пастеризованн(ое|ая)", RegexOptions.IgnoreCase);
+            var match = Regex.Match(name, "(не)?пастеризованн(ое|ая|ый)", RegexOptions.IgnoreCase);
             if (match.Success)
                 pasteurization = match.Value;
             return match.Success;
@@ -41,7 +41,7 @@ namespace BeerFormaters.BeerNameFormater
         public static bool TryRetriveFiltration(out string? filtration, string name)
         {
             filtration = null;
-            var match = Regex.Match(name, "(не)?фильтрованн(ое|ая)", RegexOptions.IgnoreCase);
+            var match = Regex.Match(name, "(не)?фильтрованн(ое|ая|ый)", RegexOptions.IgnoreCase);
             if (match.Success)
                 filtration = match.Value;
             return match.Success;

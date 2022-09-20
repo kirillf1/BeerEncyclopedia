@@ -29,7 +29,7 @@ namespace BeerFormaters.BeerNameFormater
                 rawName = rawName.Replace(pasterString!, "");
                 pasteurization = !pasterString!.StartsWith("не", StringComparison.InvariantCultureIgnoreCase);
             }
-            rawName = NameRusFormaterHelper.ReplaceExtraText(Regex.Replace(rawName, "[\",.]", ""));
+            rawName = NameRusFormaterHelper.ReplaceExtraText(Regex.Replace(rawName, "[\",.-/]", ""));
             return new FormatNameResult(rawName)
             {
                 Color = color,
