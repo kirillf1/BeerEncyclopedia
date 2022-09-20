@@ -3,6 +3,7 @@ using BeerShared.DTO;
 using BeerShared.Interfaces;
 using BeerShared.Queries;
 using Microsoft.EntityFrameworkCore;
+using ShopBeerService.Converters;
 using ShopBeerService.Infrastructure;
 using ShopParsers;
 using System.Text.RegularExpressions;
@@ -42,7 +43,7 @@ namespace ShopBeerService.Services
                 OrderBy(c => c.Name).
                 Skip(shopBeerQuery.PageIndex * shopBeerQuery.PageSize).
                 Take(shopBeerQuery.PageSize).
-                Select(b => ConvertToShopBeerInfo(b)).
+                Select(b => BeerInfoConverter.ConvertToShopBeerInfo(b)).
                 ToListAsync(),
                 count, shopBeerQuery.PageIndex, shopBeerQuery.PageSize);
         }
@@ -50,21 +51,21 @@ namespace ShopBeerService.Services
         {
             if (beer.Id != 0)
                 return false;
-            await beers.AddAsync(ConvertToShopBeer(beer));
+            await beers.AddAsync(BeerInfoConverter.ConvertToShopBeer(beer));
             await context.SaveChangesAsync();
             return true;
         }
         public async Task<bool> AddBeers(IEnumerable<ShopBeerInfo> beerCollection)
         {
             var beersConverted = beerCollection.Where(c => c.Id == 0)
-                .Select(b => ConvertToShopBeer(b));
+                .Select(b => BeerInfoConverter.ConvertToShopBeer(b));
             await beers.AddRangeAsync(beersConverted);
             await context.SaveChangesAsync();
             return beersConverted.Any();
         }
         public async Task UpdateBeer(ShopBeerInfo beer)
         {
-            var shopBeer = ConvertToShopBeer(beer);
+            var shopBeer = BeerInfoConverter.ConvertToShopBeer(beer);
             context.Entry(shopBeer).State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
@@ -76,54 +77,6 @@ namespace ShopBeerService.Services
                 beers.Remove(beer);
                 await context.SaveChangesAsync();
             }
-        }
-        public static ShopBeer ConvertToShopBeer(ShopBeerInfo beer)
-        {
-            return new ShopBeer(beer.Name, beer.Price)
-            {
-                Id = beer.Id,
-                Brand = beer.Brand,
-                Description = beer.Description,
-                ShopId = beer.ShopId.GetValueOrDefault(),
-                SourceBeerId = beer.SourceBeerId,
-                Strength = beer.Strength,
-                Style = beer.Style,
-                Color = beer.Color,
-                Country = beer.Country,
-                DiscountPrice = beer.DiscountPrice,
-                Filtration = beer.Filtration,
-                InitialWort = beer.InitialWort,
-                Manufacturer = beer.Manufacturer,
-                Name = beer.Name,
-                Pasteurization = beer.Pasteurization,
-                Price = beer.Price,
-                Rating = beer.Rating,
-                Volume = beer.Volume
-            };
-        }
-        public static ShopBeerInfo ConvertToShopBeerInfo(ShopBeer beer)
-        {
-            return new ShopBeerInfo
-            {
-                Id = beer.Id,
-                Brand = beer.Brand,
-                Description = beer.Description,
-                ShopId = beer.ShopId,
-                SourceBeerId = beer.SourceBeerId,
-                Strength = beer.Strength,
-                Style = beer.Style,
-                Color = beer.Color,
-                Country = beer.Country,
-                DiscountPrice = beer.DiscountPrice,
-                Filtration = beer.Filtration,
-                InitialWort = beer.InitialWort,
-                Manufacturer = beer.Manufacturer,
-                Name = beer.Name,
-                Pasteurization = beer.Pasteurization,
-                Price = beer.Price,
-                Rating = beer.Rating,
-                Volume = beer.Volume
-            };
         }
     }
 }
