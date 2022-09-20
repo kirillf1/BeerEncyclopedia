@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShopBeerService.Infrastructure;
@@ -11,9 +12,10 @@ using ShopBeerService.Infrastructure;
 namespace ShopBeerService.Migrations
 {
     [DbContext(typeof(ShopBeerPGDbContext))]
-    partial class ShopBeerPGDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220919143802_FullTextSerch_FormatedName")]
+    partial class FullTextSerch_FormatedName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

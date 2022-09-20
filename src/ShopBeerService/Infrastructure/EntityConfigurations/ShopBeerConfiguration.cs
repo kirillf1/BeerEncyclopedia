@@ -8,10 +8,13 @@ namespace ShopBeerService.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<ShopBeer> builder)
         {
-            builder.Property(b=>b.Id)
+            builder.Property(b => b.Id)
                 .ValueGeneratedOnAdd();
-            builder.HasKey(b=>b.Id);
+            builder.HasKey(b => b.Id);
             builder.HasIndex(c => c.Name);
+            builder.HasIndex(c => c.FormatedName)
+                .HasMethod("GIN")
+                .IsTsVectorExpressionIndex("english");
         }
     }
 }
