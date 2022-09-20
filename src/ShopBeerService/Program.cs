@@ -1,7 +1,6 @@
 using BeerShared.Interfaces;
 using ShopBeerService.Infrastructure;
 using ShopBeerService.Services;
-using ShopBeerService.Services.SourceBeerServices;
 using ShopBeerService.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
