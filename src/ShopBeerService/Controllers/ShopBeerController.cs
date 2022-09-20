@@ -1,5 +1,6 @@
 ﻿using BeerShared.Data;
 using BeerShared.DTO;
+using BeerShared.Interfaces;
 using BeerShared.Queries;
 using Microsoft.AspNetCore.Mvc;
 using ShopBeerService.Services;
@@ -10,8 +11,8 @@ namespace ShopBeerService.Controllers
     [ApiController]
     public class ShopBeerController : ControllerBase
     {
-        private readonly BeerService beerService;
-        public ShopBeerController(BeerService beerService)
+        private readonly IBeerShopService beerService;
+        public ShopBeerController(IBeerShopService beerService)
         {
             this.beerService = beerService;
         }
