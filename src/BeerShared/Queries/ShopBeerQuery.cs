@@ -1,4 +1,4 @@
-﻿namespace ShopBeerService.Queries
+﻿namespace BeerShared.Queries
 {
     public class ShopBeerQuery
     {

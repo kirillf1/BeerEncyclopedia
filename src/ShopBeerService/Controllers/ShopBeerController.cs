@@ -1,7 +1,7 @@
 ﻿using BeerShared.Data;
 using BeerShared.DTO;
+using BeerShared.Queries;
 using Microsoft.AspNetCore.Mvc;
-using ShopBeerService.Queries;
 using ShopBeerService.Services;
 
 namespace ShopBeerService.Controllers
@@ -20,10 +20,24 @@ namespace ShopBeerService.Controllers
         {
             return await beerService.GetShopBeers(shopBeerQuery);
         }
-        [HttpDelete]
-        public async Task<ActionResult> Remove([FromQuery] Guid? shopId, [FromQuery] string beerName)
+        [HttpPut]
+        public async Task<ActionResult> Update([FromBody] ShopBeerInfo beerInfo)
         {
-            await beerService.DeleteBeer(shopId, beerName);
+            await beerService.UpdateBeer(beerInfo);
+            return Ok();
+        }
+        [HttpPost]
+        public async Task<ActionResult> Add([FromBody] ShopBeerInfo beerInfo)
+        {
+            var isAdded = await beerService.AddBeer(beerInfo);
+            if (!isAdded)
+                return BadRequest("Beer invalid");
+            return Ok();
+        }
+        [HttpDelete]
+        public async Task<ActionResult> Remove([FromQuery] int id)
+        {
+            await beerService.DeleteBeer(id);
             return Ok();
         }
     }

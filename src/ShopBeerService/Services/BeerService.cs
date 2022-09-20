@@ -1,14 +1,15 @@
 ﻿using BeerShared.Data;
 using BeerShared.DTO;
+using BeerShared.Interfaces;
+using BeerShared.Queries;
 using Microsoft.EntityFrameworkCore;
 using ShopBeerService.Infrastructure;
-using ShopBeerService.Queries;
 using ShopParsers;
 using System.Text.RegularExpressions;
 
 namespace ShopBeerService.Services
 {
-    public class BeerService
+    public class BeerService : IBeerShopService
     {
         public BeerService(ShopBeerPGDbContext context)
         {
@@ -23,9 +24,8 @@ namespace ShopBeerService.Services
             if (shopBeerQuery.Name is not null)
             {
                 var nameSplited = shopBeerQuery.Name.Split(' ');
-                var regexPattern = $"{string.Join(@".*", nameSplited.Select(s=>$@"(\y{s}\y)"))}";
-                //EF.Functions.ILike(c.Name, $"%{shopBeerQuery.Name}%"
-                query = query.Where(c => Regex.IsMatch(c.Name,regexPattern,RegexOptions.IgnoreCase));
+                var regexPattern = $"{string.Join(@".*", nameSplited.Select(s => $@"(\y{s}\y)"))}";
+                query = query.Where(c => Regex.IsMatch(c.Name, regexPattern, RegexOptions.IgnoreCase));
             }
             if (shopBeerQuery.PriceMax.HasValue)
                 query = query.Where(c => c.Price < shopBeerQuery.PriceMax.Value);
@@ -42,35 +42,66 @@ namespace ShopBeerService.Services
                 OrderBy(c => c.Name).
                 Skip(shopBeerQuery.PageIndex * shopBeerQuery.PageSize).
                 Take(shopBeerQuery.PageSize).
-                Select(b => ShopBeerToInfo(b)).
+                Select(b => ConvertToShopBeerInfo(b)).
                 ToListAsync(),
                 count, shopBeerQuery.PageIndex, shopBeerQuery.PageSize);
         }
-        public async Task AddBeer(ShopBeer beer)
+        public async Task<bool> AddBeer(ShopBeerInfo beer)
         {
-            await beers.AddAsync(beer);
+            if (beer.Id != 0)
+                return false;
+            await beers.AddAsync(ConvertToShopBeer(beer));
             await context.SaveChangesAsync();
+            return true;
         }
-        public async Task AddBeers(IEnumerable<ShopBeer> beerCollection)
+        public async Task<bool> AddBeers(IEnumerable<ShopBeerInfo> beerCollection)
         {
-            await beers.AddRangeAsync(beerCollection);
+            var beersConverted = beerCollection.Where(c => c.Id == 0)
+                .Select(b => ConvertToShopBeer(b));
+            await beers.AddRangeAsync(beersConverted);
             await context.SaveChangesAsync();
+            return beersConverted.Any();
         }
-        public async Task UpdateBeer(ShopBeer shopBeer)
+        public async Task UpdateBeer(ShopBeerInfo beer)
         {
+            var shopBeer = ConvertToShopBeer(beer);
             context.Entry(shopBeer).State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
-        public async Task DeleteBeer(Guid? shopId, string name)
+        public async Task DeleteBeer(int id)
         {
-            var beer = await beers.FirstOrDefaultAsync(c => c.ShopId == shopId && c.Name == name);
+            var beer = await beers.FirstOrDefaultAsync(c => c.Id == id);
             if (beer is not null)
             {
                 beers.Remove(beer);
                 await context.SaveChangesAsync();
             }
         }
-        public static ShopBeerInfo ShopBeerToInfo(ShopBeer beer)
+        public static ShopBeer ConvertToShopBeer(ShopBeerInfo beer)
+        {
+            return new ShopBeer(beer.Name, beer.Price)
+            {
+                Id = beer.Id,
+                Brand = beer.Brand,
+                Description = beer.Description,
+                ShopId = beer.ShopId.GetValueOrDefault(),
+                SourceBeerId = beer.SourceBeerId,
+                Strength = beer.Strength,
+                Style = beer.Style,
+                Color = beer.Color,
+                Country = beer.Country,
+                DiscountPrice = beer.DiscountPrice,
+                Filtration = beer.Filtration,
+                InitialWort = beer.InitialWort,
+                Manufacturer = beer.Manufacturer,
+                Name = beer.Name,
+                Pasteurization = beer.Pasteurization,
+                Price = beer.Price,
+                Rating = beer.Rating,
+                Volume = beer.Volume
+            };
+        }
+        public static ShopBeerInfo ConvertToShopBeerInfo(ShopBeer beer)
         {
             return new ShopBeerInfo
             {
@@ -88,7 +119,6 @@ namespace ShopBeerService.Services
                 InitialWort = beer.InitialWort,
                 Manufacturer = beer.Manufacturer,
                 Name = beer.Name,
-                NameEn = beer.NameEn,
                 Pasteurization = beer.Pasteurization,
                 Price = beer.Price,
                 Rating = beer.Rating,
