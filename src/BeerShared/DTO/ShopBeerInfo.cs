@@ -6,7 +6,6 @@ namespace BeerShared.DTO
         public int Id { get; set; }
         public Guid? ShopId { get; set; }
         public string Name { get; set; } = default!;
-        public string? NameEn { get; set; }
         public string? Color { get; set; }
         public string? Manufacturer { get; set; }
         public double? Volume { get; set; }
