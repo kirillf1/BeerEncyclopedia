@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cyrillic.Convert" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
       <PrivateAssets>all</PrivateAssets>
@@ -22,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BeerFormaters\BeerFormaters.csproj" />
     <ProjectReference Include="..\BeerShared\BeerShared.csproj" />
     <ProjectReference Include="..\ShopParsers\ShopParsers.csproj" />
   </ItemGroup>
