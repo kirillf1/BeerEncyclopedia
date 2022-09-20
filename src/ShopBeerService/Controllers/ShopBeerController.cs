@@ -17,7 +17,7 @@ namespace ShopBeerService.Controllers
             this.beerService = beerService;
         }
         [HttpGet]
-        public async Task<ActionResult<ApiResult<ShopBeerInfo>>> GetBeers([FromQuery]ShopBeerQuery shopBeerQuery)
+        public async Task<ActionResult<ApiResult<ShopBeerInfo>>> GetBeers([FromQuery] ShopBeerQuery shopBeerQuery)
         {
             return await beerService.GetShopBeers(shopBeerQuery);
         }
@@ -35,8 +35,8 @@ namespace ShopBeerService.Controllers
                 return BadRequest("Beer invalid");
             return Ok();
         }
-        [HttpDelete]
-        public async Task<ActionResult> Remove([FromQuery] int id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Remove(int id)
         {
             await beerService.DeleteBeer(id);
             return Ok();
