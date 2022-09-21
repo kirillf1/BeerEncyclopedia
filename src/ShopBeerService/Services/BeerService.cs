@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace ShopBeerService.Services
 {
-    public class BeerService : IBeerShopService
+    public class BeerService : IShopBeerService
     {
         public BeerService(ShopBeerPGDbContext context)
         {

@@ -11,8 +11,8 @@ namespace ShopBeerService.Controllers
     [ApiController]
     public class ShopBeerController : ControllerBase
     {
-        private readonly IBeerShopService beerService;
-        public ShopBeerController(IBeerShopService beerService)
+        private readonly IShopBeerService beerService;
+        public ShopBeerController(IShopBeerService beerService)
         {
             this.beerService = beerService;
         }

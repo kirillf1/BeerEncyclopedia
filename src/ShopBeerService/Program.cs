@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddScoped<IBeerShopService,BeerService>();
+builder.Services.AddScoped<IShopBeerService,BeerService>();
 if (!builder.Environment.IsDevelopment())
 {
     WorkersServiceExtension.ConfigureWorkers(builder.Services, builder.Configuration);
