@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace BeerEncyclopedia.Domain
 {
     public class Beer

@@ -11,6 +11,7 @@ namespace BeerEncyclopedia.Infrastructure.Data.Configuration
             builder.HasKey(b => b.Id);
             builder.Property(b => b.NameRus).HasMaxLength(400);
             builder.Property(b => b.NameEn).HasMaxLength(400);
+            builder.HasMany(m => m.Beers);
         }
     }
 }

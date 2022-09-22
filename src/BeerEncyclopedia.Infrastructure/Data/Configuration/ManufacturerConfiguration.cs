@@ -13,6 +13,7 @@ namespace BeerEncyclopedia.Infrastructure.Data.Configuration
             builder.Property(m => m.Name).HasMaxLength(600);
             builder.HasIndex(m => m.Name);
             builder.HasOne(c => c.Country);
+            builder.HasMany(m => m.Beers);
         }
     }
 }

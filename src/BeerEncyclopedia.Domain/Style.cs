@@ -1,4 +1,6 @@
-﻿namespace BeerEncyclopedia.Domain
+﻿using System.Text.Json.Serialization;
+
+namespace BeerEncyclopedia.Domain
 {
     public class Style
     {
@@ -8,7 +10,9 @@
             Id = id;
             NameEn = name;
             Description = description;
+            Beers = new List<Beer>();
         }
+        public List<Beer> Beers { get; set; }
         public Guid Id { get; }
         public string NameEn { get; set; }
         public string? NameRus { get; set; }
