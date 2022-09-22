@@ -1,6 +1,7 @@
 using BeerShared.Interfaces;
 using ShopBeerService.Infrastructure;
 using ShopBeerService.Services;
+using ShopBeerService.Services.SourceBeerServices;
 using ShopBeerService.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IShopBeerService,BeerService>();
+builder.Services.AddScoped<IShopBeerBinder,ShopBeerBinder>();
 if (!builder.Environment.IsDevelopment())
 {
     WorkersServiceExtension.ConfigureWorkers(builder.Services, builder.Configuration);
