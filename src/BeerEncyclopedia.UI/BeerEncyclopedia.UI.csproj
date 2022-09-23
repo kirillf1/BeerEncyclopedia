@@ -49,4 +49,13 @@
         <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MudBlazor" Version="6.0.16" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BeerEncyclopedia.Application\BeerEncyclopedia.Application.csproj" />
+      <ProjectReference Include="..\BeerEncyclopedia.Domain\BeerEncyclopedia.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
