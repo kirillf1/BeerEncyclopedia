@@ -11,7 +11,10 @@ namespace BeerEncyclopedia.Infrastructure.Data.Configuration
             builder.HasKey(m => m.Id);
             builder.HasIndex(m => m.Id).IsUnique();
             builder.Property(m => m.Name).HasMaxLength(600);
-            builder.HasIndex(m => m.Name);
+            builder.HasIndex(m => m.Name)
+                .HasMethod("GIN")
+                .IsTsVectorExpressionIndex("english")
+                .IsTsVectorExpressionIndex("russian");
             builder.HasOne(c => c.Country);
             builder.HasMany(m => m.Beers);
         }
