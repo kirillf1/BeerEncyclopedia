@@ -1,6 +1,6 @@
 ﻿namespace BeerEncyclopedia.Domain
 {
-    public class Color
+    public class Color : Entity
     {
         private Color() { }
         public Color(Guid id,string name)
@@ -9,8 +9,6 @@
             Name = name;
             Beers = new List<Beer>();
         }
-
-        public Guid Id { get; }
         public string Name { get; set; }
         public List<Beer> Beers { get; set; }
     }

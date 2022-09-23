@@ -1,9 +1,7 @@
 ﻿
-using System.Text.Json.Serialization;
-
 namespace BeerEncyclopedia.Domain
 {
-    public class Beer
+    public class Beer : Entity
     {
         private Beer() { }
         public Beer(Guid id, string name,string pictureUrl, ChemicalIndicators chemicalIndicators, OrganolepticIndicators organolepticIdicators)
@@ -17,7 +15,6 @@ namespace BeerEncyclopedia.Domain
             Rating = 0;
             Styles = new List<Style>();
         }
-        public Guid Id { get; }
         public BeerImages BeerImages { get; set; }
         public string Name { get; set; }
         public string? AltName { get; set; }

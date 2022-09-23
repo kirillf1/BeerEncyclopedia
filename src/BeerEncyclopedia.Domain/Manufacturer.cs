@@ -1,6 +1,6 @@
 ﻿namespace BeerEncyclopedia.Domain
 {
-    public class Manufacturer
+    public class Manufacturer : Entity
     {
         private Manufacturer() { }
         public Manufacturer(Guid id,string name,string description,Country country)
