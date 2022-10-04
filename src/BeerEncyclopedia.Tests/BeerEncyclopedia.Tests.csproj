@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BeerEncyclopedia.Application\BeerEncyclopedia.Application.csproj" />
     <ProjectReference Include="..\BeerFormaters\BeerFormaters.csproj" />
     <ProjectReference Include="..\ShopBeerService\ShopBeerService.csproj" />
   </ItemGroup>
