@@ -11,7 +11,6 @@
             Country = country;
             Beers = new List<Beer>();
         }
-        public Guid Id { get; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Country Country { get; set; }

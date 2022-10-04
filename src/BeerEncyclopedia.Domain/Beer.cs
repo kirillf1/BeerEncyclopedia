@@ -18,7 +18,7 @@ namespace BeerEncyclopedia.Domain
         public BeerImages BeerImages { get; set; }
         public string Name { get; set; }
         public string? AltName { get; set; }
-        public Country? Country { get; set; }
+        public Country Country { get; set; }
         public List<Style> Styles { get; set; } 
         public string? Description { get; set; }
         public double Rating { get; set; }
