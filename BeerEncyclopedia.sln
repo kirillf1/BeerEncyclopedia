@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerEncyclopedia.Applicatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerEncyclopedia.API", "src\BeerEncyclopedia.API\BeerEncyclopedia.API.csproj", "{D9949466-E8D5-466A-ADA0-D3FE8A485615}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerEncyclopedia.UI", "src\BeerEncyclopedia.UI\BeerEncyclopedia.UI.csproj", "{C73717A5-0AF0-4E7D-BBE1-75C734403B62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeerEncyclopedia.UI", "src\BeerEncyclopedia.UI\BeerEncyclopedia.UI.csproj", "{C73717A5-0AF0-4E7D-BBE1-75C734403B62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
