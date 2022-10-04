@@ -12,7 +12,7 @@ namespace BeerEncyclopedia.Infrastructure.Data.Configuration
             builder.HasIndex(b => b.Id).IsUnique();
             builder.HasIndex(b => new { b.Name, b.AltName })
                 .HasMethod("GIN")
-                 .IsTsVectorExpressionIndex("english")
+                .IsTsVectorExpressionIndex("english")
                 .IsTsVectorExpressionIndex("russian");
             builder.OwnsOne(b => b.BeerImages)
                 .ToTable("BeerImages");
@@ -20,9 +20,10 @@ namespace BeerEncyclopedia.Infrastructure.Data.Configuration
             builder.HasMany(b => b.Manufacturers);
             builder.OwnsOne(b => b.ChemicalIndicators)
                 .ToTable("ChemicalIndicators");
-            builder.OwnsOne(b => b.OrganolepticIndicators).
-                ToTable("OrganolepticIndicators").
-                HasOne(o => o.Color);
-        }
+            builder.OwnsOne(b => b.OrganolepticIndicators)
+                .ToTable("OrganolepticIndicators")
+                .Navigation(c => c.Color)
+                .AutoInclude();
+         }
     }
 }

@@ -16,6 +16,8 @@ namespace BeerEncyclopedia.Infrastructure.Data.Configuration
                 .IsTsVectorExpressionIndex("english")
                 .IsTsVectorExpressionIndex("russian");
             builder.HasOne(c => c.Country);
+            builder.Navigation(c => c.Country)
+                .AutoInclude();
             builder.HasMany(m => m.Beers);
         }
     }
