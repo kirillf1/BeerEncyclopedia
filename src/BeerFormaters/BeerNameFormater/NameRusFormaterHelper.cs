@@ -8,6 +8,13 @@ namespace BeerFormaters.BeerNameFormater
         private const string NumberPattern = @"\d+([.,][0-9]{1,3})?";
         private const string ColorsPattern = @"\b(светлое|темное|коричневое|янтарное|красное)\b";
         private const string PopularCountriesPattern = @"\b(россия|германия|чехия|сша|бельгия|англия)\b";
+        private static readonly HashSet<string> ExtraTextPatterns = new();
+        static NameRusFormaterHelper()
+        {
+            ExtraTextPatterns.Add(@"\b(пив(о|а)|пивной|(напиток|нап))\b");
+            ExtraTextPatterns.Add(@"\b(in|can|в|жестяной|железн(ой|ая)|банк(е|а)|ж/б|ж.б.|жб)\b");
+            ExtraTextPatterns.Add(@"\b(безалкогольн(ое|ая)|стекл(о|янное)|неосветленн(ое|ая))\b");
+        }
         public static bool TryReplaceVolume(out double volume, ref string name)
         {
             volume = 0;
@@ -79,8 +86,7 @@ namespace BeerFormaters.BeerNameFormater
             {
                 if (nameParts[i].Length < 3)
                     continue;
-                if (Regex.IsMatch(nameParts[i], @"\b(пиво|пивной|(напиток|нап)|in|can|в|жестяной|железн(ой|ая)|банк(е|а)|" +
-                    @"ж/б|безалкогольное|стекло|неосветленное)\b", RegexOptions.IgnoreCase))
+                if (ExtraTextPatterns.Any(p=> Regex.IsMatch(nameParts[i],p, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)))
                     nameParts[i] = "";
             }
             return string.Join(' ', nameParts.Where(c=> !string.IsNullOrWhiteSpace(c)));
