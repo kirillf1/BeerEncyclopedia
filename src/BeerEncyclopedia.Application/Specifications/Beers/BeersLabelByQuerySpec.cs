@@ -3,6 +3,7 @@ using BeerEncyclopedia.Application.Contracts;
 using BeerEncyclopedia.Application.Contracts.Beers;
 using BeerEncyclopedia.Application.Helpers;
 using BeerEncyclopedia.Domain;
+using System.Linq.Expressions;
 
 namespace BeerEncyclopedia.Application.Specifications.Beers
 {
@@ -14,7 +15,13 @@ namespace BeerEncyclopedia.Application.Specifications.Beers
         {
             OrderColumn["Name"] = (o, b) => b.SetOrderExpression(o, c => c.Name);
             OrderColumn["Rating"] = (o, b) => b.SetOrderExpression(o, c => c.Rating);
-            OrderColumn["CreationTime"] = (o, b) => b.SetOrderExpression(o, c => c.CreationTime);
+            OrderColumn["CreationTime"] = (o, b) => b.SetOrderExpression(
+                new List<(Expression<Func<Beer, object?>> Expression, OrderBy OrderBy)>
+            {
+                new (c=>c.CreationTime.HasValue,OrderBy.DESC),
+                new (c=>c.CreationTime,o)
+            });
+
         }
         public BeersLabelByQuerySpec(BeersQuery beersQuery, INameSearchSpecificationFactory<Beer> specificationFactory)
         {
@@ -42,7 +49,7 @@ namespace BeerEncyclopedia.Application.Specifications.Beers
             if (OrderColumn.ContainsKey(orderString))
             {
                 var orderMethod = OrderColumn[orderString];
-                orderMethod(beersQuery.Order, Query).ThenByDescending(c => c.CreationTime.HasValue);
+                orderMethod(beersQuery.Order, Query);
             }
             Query.Select(b => BeerDtoConventer.ConvertBeerToLabel(b));
             Query.SkipTake(beersQuery);
