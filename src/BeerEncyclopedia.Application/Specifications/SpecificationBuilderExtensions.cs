@@ -20,6 +20,21 @@ namespace BeerEncyclopedia.Application.Specifications
                 return specification.OrderBy(funcOrder);
             return specification.OrderByDescending(funcOrder);
         }
+        public static IOrderedSpecificationBuilder<T> SetOrderExpression<T>(this ISpecificationBuilder<T> specification, IEnumerable<(Expression<Func<T, object?>> Expression,OrderBy OrderBy)> funcOrders) where T : class
+        {
+            var query = specification.Specification.Query;
+            if (!funcOrders.Any())
+                return specification.OrderBy(c=> c);
+            var orderQuery = SetOrderExpression(specification, funcOrders.First().OrderBy,funcOrders.First().Expression);
+            foreach (var exp in funcOrders.Skip(1))
+            {
+                if (exp.OrderBy == OrderBy.ASC)
+                    orderQuery = orderQuery.ThenBy(exp.Expression);
+                else
+                    orderQuery = orderQuery.ThenByDescending(exp.Expression);
+            }
+            return orderQuery;
+        }
         public static Expression<Func<T, TReturn>> JoinQueries<T, TReturn>(Func<Expression, Expression, BinaryExpression> joiner, IReadOnlyCollection<Expression<Func<T, TReturn>>> expressions)
         {
             if (!expressions.Any())
