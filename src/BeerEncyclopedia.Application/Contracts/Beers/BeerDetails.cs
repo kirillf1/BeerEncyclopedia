@@ -7,6 +7,7 @@ namespace BeerEncyclopedia.Application.Contracts.Beers
 {
     public class BeerDetails
     {
+        public Guid Id { get; set; } = default!;
         public string Name { get; set; } = default!;
         public string? AltName { get; set; }
         public string? Description { get; set; }

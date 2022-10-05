@@ -9,6 +9,7 @@ namespace BeerEncyclopedia.Application.Helpers
         {
             return new BeerLabel
             {
+                Id  = beer.Id,
                 Name = beer.Name,
                 Country = beer.Country.Name,
                 Manufacturers = beer.Manufacturers.Select(c => ManufactureDtoConverter.ConvertManufacturerToLabel(c)).ToList(),
@@ -22,6 +23,7 @@ namespace BeerEncyclopedia.Application.Helpers
         {
             return new BeerDetails
             {
+                Id = beer.Id,
                 AltName = beer.AltName,
                 Name = beer.Name,
                 Description = beer.Description,

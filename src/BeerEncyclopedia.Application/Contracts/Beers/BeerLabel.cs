@@ -5,6 +5,7 @@ namespace BeerEncyclopedia.Application.Contracts.Beers
 {
     public class BeerLabel
     {
+        public Guid Id { get; set; } = default!;
         public List<ManufacturerLabel> Manufacturers { get; set; } = default!;
         public List<StyleLabel> Styles { get; set; } = default!;
         public string PictureUrl { get; set; } = default!;
