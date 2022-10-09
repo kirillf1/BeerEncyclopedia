@@ -11,8 +11,8 @@ namespace BeerEncyclopedia.Application.Contracts.Beers
         public string Name { get; set; } = default!;
         public string? AltName { get; set; }
         public string? Description { get; set; }
-        public CountryDto CountryDto { get; set; } = default!;
-        public ColorDto ColorDto { get; set; } = default!;
+        public CountryDto Country { get; set; } = default!;
+        public ColorDto Color { get; set; } = default!;
         public double Rating { get; set; }
         public string? CreationTime { get; set; }
         public List<StyleLabel> Styles { get; set; } = default!;
