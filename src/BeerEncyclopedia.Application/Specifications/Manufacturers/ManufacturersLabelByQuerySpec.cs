@@ -17,7 +17,7 @@ namespace BeerEncyclopedia.Application.Specifications.Manufacturers
                 foreach (var filter in specificationByName.WhereExpressions.Select(c => c.Filter))
                     Query.Where(filter);
             }
-            if (manufacturerQuery.CountriesId != null)
+            if (manufacturerQuery.CountriesId != null && manufacturerQuery.CountriesId.Any())
             {
                 Query.Where(m => manufacturerQuery.CountriesId.Contains(m.Country.Id));
             }
