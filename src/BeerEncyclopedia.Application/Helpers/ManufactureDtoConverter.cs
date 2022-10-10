@@ -15,7 +15,7 @@ namespace BeerEncyclopedia.Application.Helpers
                 Country = CountryDtoConverter.ConvertCountryToDto(manufacturer.Country)
             };
         }
-        public static ManufacturerDetails ConvertManufacturerToDetails(Manufacturer manufacturer)
+        public static ManufacturerDetails ConvertManufacturerToDetails(Manufacturer manufacturer,int beerCount = 10)
         {
             return new ManufacturerDetails
             {
@@ -23,7 +23,9 @@ namespace BeerEncyclopedia.Application.Helpers
                 Id = manufacturer.Id,
                 Name = manufacturer.Name,
                 PictureUrl = manufacturer.PictureUrl,
-                Description = manufacturer.Description
+                Description = manufacturer.Description,
+                Beers = manufacturer.Beers.Select(b=> BeerDtoConventer.ConvertBeerToLabel(b)).Take(beerCount)
+                
             };
         }
     }
