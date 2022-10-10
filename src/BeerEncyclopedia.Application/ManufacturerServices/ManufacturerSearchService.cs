@@ -1,6 +1,5 @@
 ﻿using Ardalis.Result;
 using BeerEncyclopedia.Application.Contracts.Manufacturers;
-using BeerEncyclopedia.Application.Helpers;
 using BeerEncyclopedia.Application.Specifications;
 using BeerEncyclopedia.Application.Specifications.Manufacturers;
 using BeerEncyclopedia.Domain;
@@ -41,8 +40,7 @@ namespace BeerEncyclopedia.Application.ManufacturerServices
         {
             try
             {
-                var specification = new EntityByIdSpec<Manufacturer, ManufacturerDetails>(id,
-                    m => ManufactureDtoConverter.ConvertManufacturerToDetails(m));
+                var specification = new ManufacturerDetailsByIdSpec(id, 10);
                 var manufacturer = await repository.FirstOrDefaultAsync(specification, cancellationToken);
                 if (manufacturer is null)
                     return Result.NotFound();
