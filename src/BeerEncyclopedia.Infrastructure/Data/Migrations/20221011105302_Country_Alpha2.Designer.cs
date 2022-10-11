@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BeerEncyclopedia.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BeerEncyclopedia.Infrastructure.Migrations
 {
     [DbContext(typeof(BeerEncyclopediaPgDbContext))]
-    partial class BeerEncyclopediaPgDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221011105302_Country_Alpha2")]
+    partial class Country_Alpha2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

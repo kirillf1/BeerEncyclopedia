@@ -10,7 +10,8 @@ namespace BeerEncyclopedia.Application.Helpers
             return new CountryDto
             {
                 Id = country.Id,
-                Name = country.Name
+                Name = country.Name,
+                Alpha2 = country.Alpha2
             };
         }
     }
