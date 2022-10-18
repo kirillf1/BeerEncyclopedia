@@ -1,0 +1,35 @@
+﻿@page "/styledetails/{Id:guid}"
+@using BeerEncyclopedia.Application.Contracts.Styles
+@using BeerEncyclopedia.Application.StyleServices
+@using BeerEncyclopedia.UI.Shared.Beers
+
+@if(style is not null)
+{
+    <MudText Typo="Typo.body1" Class="py-3"><b>@(style.NameEn + (style.NameRus != null ? $"/{style.NameRus}" : ""))</b></MudText>
+     <MudText Typo="Typo.body1"><b>Описание: </b>@(style.Description ?? "Описание еще не добавлено!")</MudText>
+    <MudText Class="my-3" Typo="Typo.h6"><b>@($"Пиво в стиле {style.NameEn} :")</b></MudText>
+    <MudGrid>
+        @foreach (var beer in style.Beers)
+        {
+            <MudItem Class="d-flex" sm="6" xs="12">
+                <BeerItem Beer="beer" />
+            </MudItem>
+        }
+    </MudGrid>
+}
+
+@code {
+    [Inject]
+    private IStyleSearchService StyleSearchService { get; set; } = default!;
+    [Parameter]
+    public Guid Id { get; set; }
+    private StyleDetails? style;
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await StyleSearchService.GetStyleDetails(Id, default);
+        if (result.IsSuccess)
+        {
+            style = result.Value;
+        }
+    }
+}

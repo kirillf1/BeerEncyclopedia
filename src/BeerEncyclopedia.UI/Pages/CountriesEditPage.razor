@@ -1,0 +1,29 @@
+﻿@page "/countriesedit"
+@using BeerEncyclopedia.Application.Contracts.Countries
+@using BeerEncyclopedia.Application.CountryServices
+@using BeerEncyclopedia.UI.Shared.Countries
+<MudText Typo="Typo.h3">Редактировать страны</MudText>
+<MudButton OnClick="AddCountry" Class="d-flex justify-self-end">Добавить</MudButton>
+<MudGrid>
+    @foreach (var country in Countries)
+    {
+        <MudItem sm="6" Class="d-flex">
+            <CountryEditor Country="country"></CountryEditor>
+        </MudItem>
+    }
+</MudGrid>
+@code {
+    [Inject]
+    private ICountrySearchService CountrySearchService { get; set; } = default!;
+    private List<CountryDto> Countries = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await CountrySearchService.GetAllCountries();
+        if (result.IsSuccess)
+            Countries.AddRange(result.Value);
+    }
+    private void AddCountry()
+    {
+        Countries.Add(new CountryDto());
+    }
+}

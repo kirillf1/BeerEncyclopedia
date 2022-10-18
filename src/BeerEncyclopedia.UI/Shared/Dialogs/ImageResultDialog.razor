@@ -1,0 +1,47 @@
+﻿@using BeerEncyclopedia.Application.BeersServices.SearchServices
+@using BeerEncyclopedia.Application.Contracts.Beers
+@using BeerEncyclopedia.UI.Shared.Beers
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 400px; overflow-y: scroll">
+            @if (isLoading)
+            {
+                <MudProgressCircular Indeterminate="true"></MudProgressCircular>
+            }
+            else
+            {
+                <MudStack Spacing="3">
+                    @if (!FoundedBeers.Any())
+                    {
+                        <MudText>Ничего не найдено!</MudText>
+                    }
+                    @foreach (var beer in FoundedBeers)
+                    {
+                        <BeerItem Beer="beer"></BeerItem>
+                    }
+                </MudStack>
+            }
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+
+    [Inject]
+    private IBeerSearchByImageService beerSearchByImageService { get; set; } = default!;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = default!;
+    private List<BeerLabel> FoundedBeers = new();
+    [Parameter] public byte[] Bytes { get; set; } = default!;
+    private bool isLoading;
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var result = await beerSearchByImageService.GetBeersByImage(Bytes, 20);
+        if (result.IsSuccess)
+        {
+            FoundedBeers.AddRange(result.Value);
+        }
+        isLoading = false;
+    }
+}

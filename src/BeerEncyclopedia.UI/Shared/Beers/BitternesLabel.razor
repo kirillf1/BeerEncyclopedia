@@ -1,0 +1,15 @@
+﻿<MudTooltip Arrow="true" Placement="Placement.Right">
+    <ChildContent>
+        <MudBadge Bordered="true" Icon="@Icons.Filled.Info">
+            <MudText Typo="Typo.body1"><b>IBU: </b> @(Bitterness)</MudText>
+            </MudBadge>
+        </ChildContent>
+        <TooltipContent>
+            <MudText Typo="Typo.caption">International Bitterness Unit – международная единица горькости. Она предназначена для того, чтобы определять степень горечи пива. Количество горечи может варьироваться от 1 до 100 IBU</MudText>
+
+        </TooltipContent>
+    </MudTooltip>
+    @code {
+    [Parameter]
+    public double Bitterness { get; set; }
+}

@@ -1,0 +1,43 @@
+﻿@page "/beers"
+@using BeerEncyclopedia.Application.Contracts.Manufacturers
+@using BeerEncyclopedia.UI.Shared.Beers
+@using BeerEncyclopedia.UI.Shared.Countries
+@using BeerEncyclopedia.UI.Shared.Manufacturers
+@using BeerEncyclopedia.UI.Shared.Styles
+@using MudBlazor
+
+<ItemSearchDrawer IsOpened="@isDrawerOpened" SearchClicked="()=>LoadBeers(1)" RefreshClicked="()=> RefreshQuery()">
+    <SearchElements>
+        <MudStack Class="m-3">
+            <MudTextField T="string" Label="Название пива" @bind-Value="BeersQuery.Name"
+                          HelperTextOnFocus="true"
+                          Variant="Variant.Outlined" />
+            <ManufacturerSelect ManufacturerIds="BeersQuery.ManufacturersId" />
+            <StyleSelect StyleIds="BeersQuery.StylesId" />
+            <CountrySelect CountryIds="BeersQuery.CountriesId" EnableMultiSelect="true" />
+        </MudStack>
+    </SearchElements>
+</ItemSearchDrawer>
+<MudGrid Class="mt-2" Justify="Justify.SpaceBetween">
+    <MudItem xs="6">
+        <MudText Align="Align.Left" Typo="Typo.h4">Пиво</MudText>
+    </MudItem>
+    <MudItem Class="d-flex justify-end" xs="6">
+        <MudFab EndIcon="@Icons.Filled.ArrowRight" Label="Поиск"
+                OnClick="()=>isDrawerOpened = true" />
+    </MudItem>
+</MudGrid>
+<NameSearcherByImage Title="Найти по картинке" />
+<MudButton Href="/beeredit">Добавить</MudButton>
+<ItemList Items="Beers" IsLoading="IsLoading">
+    <RowTemplate Context="beer">
+        <BeerItem Beer="beer" />
+    </RowTemplate>
+</ItemList>
+<div class="d-flex justify-center m-4">
+    <MudPagination Disabled="IsLoading" ShowFirstButton="true"
+                   ShowLastButton="true"
+                   BoundaryCount="2"
+                   Selected="@(BeersQuery.PageIndex +1)"
+                   MiddleCount="5" Count="@PageCount" SelectedChanged="LoadBeers" />
+</div>

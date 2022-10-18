@@ -1,0 +1,10 @@
+﻿@using BeerEncyclopedia.Application.Contracts.Styles
+<MudSelect @ref="MudSelect" T="StyleLabel" MultiSelection="EnableMultiSelect" ValueChanged="SelectedItem"
+           SelectedValuesChanged="SelectedItems" ToStringFunc="(m)=>m.NameEn ?? null" 
+           Label="Стили" Variant="Variant.Outlined">
+    @foreach(var item in Styles)
+    {
+        <MudSelectItem T="StyleLabel"  Value="item">@item.NameEn
+        </MudSelectItem>
+    }
+</MudSelect>

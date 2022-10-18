@@ -1,0 +1,23 @@
+﻿<MudDrawer ClipMode="DrawerClipMode.Always" @bind-Open="IsOpened"
+           Anchor="Anchor.Right" Variant="DrawerVariant.Temporary">
+    <MudDrawerHeader>
+        <MudStack Class="position-fixed z-10" Justify="Justify.SpaceBetween" Row="true">
+            <MudFab OnClick="async ()=>await SearchClicked()" EndIcon="@Icons.Filled.Search" Label="Искать" />
+            <MudFab OnClick="async ()=>await RefreshClicked()" EndIcon="@Icons.Filled.Refresh" Size="Size.Small" />
+        </MudStack>
+    </MudDrawerHeader>
+    <MudDrawerContainer>
+        @SearchElements
+    </MudDrawerContainer>
+</MudDrawer>
+
+@code {
+    [Parameter]
+    public bool IsOpened { get; set; }
+    [Parameter]
+    public Func<Task> RefreshClicked { get; set; } = default!;
+    [Parameter]
+    public Func<Task> SearchClicked { get; set; } = default!;
+    [Parameter]
+    public RenderFragment SearchElements { get; set; } = default!;
+}

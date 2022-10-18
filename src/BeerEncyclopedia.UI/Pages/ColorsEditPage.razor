@@ -1,0 +1,30 @@
+﻿@page "/colorsedit"
+@using BeerEncyclopedia.Application.ColorServices
+@using BeerEncyclopedia.Application.Contracts.Colors
+@using BeerEncyclopedia.UI.Shared.Colors
+<MudText Typo="Typo.h3">Редактировать цвета</MudText>
+<MudButton OnClick="AddColor" Class="d-flex justify-self-end">Добавить</MudButton>
+<MudGrid>
+    @foreach (var color in Colors)
+    {
+        <MudItem sm="6" Class="d-flex">
+            <ColorEditor Color="color"></ColorEditor>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    [Inject]
+    private IColorSearchService colorSearchService { get; set; }
+    private List<ColorDto> Colors = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await colorSearchService.GetAllColors();
+        if (result.IsSuccess)
+            Colors.AddRange(result.Value);
+    }
+    private void AddColor()
+    {
+        Colors.Add(new ColorDto());
+    }
+}

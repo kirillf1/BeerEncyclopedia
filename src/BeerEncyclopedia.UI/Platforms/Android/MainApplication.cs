@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace BeerEncyclopedia.UI
+namespace BeerEncyclopedia.UI.Platforms.Android
 {
     [Application]
     public class MainApplication : MauiApplication

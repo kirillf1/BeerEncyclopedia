@@ -1,0 +1,56 @@
+﻿@using BeerEncyclopedia.Application.Contracts.Beers
+
+<MudCard Class="flex-grow-1">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Align="Align.Center" Typo="Typo.button"><a Href=@($"/beerdetails/{Beer.Id}")>@Beer.Name</a></MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            @if (!CanEdit)
+            {
+                <MudMenu Class="d-flex align-self-end" Icon="@Icons.Material.Filled.MoreVert">
+                    <MudMenuItem>
+                        <MudFab Href="@($"beeredit/{Beer.Id}")" Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit"/>                              
+                    </MudMenuItem>
+                    <MudMenuItem>
+                        <MudFab Size="Size.Small" StartIcon="@Icons.Material.Filled.Delete" />
+                    </MudMenuItem>
+                </MudMenu>
+            }
+        </CardHeaderActions>
+    </MudCardHeader>
+        <MudCardActions>
+            <MudStack Spacing="1" Row="true">
+                <MudRating Size="Size.Medium" ReadOnly="true" SelectedValue="@((int)Beer.Rating)"/>
+                <MudText Typo="Typo.body2">(@Beer.Rating)</MudText>
+            </MudStack>
+        </MudCardActions>
+    <MudCardContent>
+        <MudStack Row="true">
+            <MudImage Height="150" Width="150" Src=@Beer.PictureUrl Alt="beer" Elevation="25" 
+            Class="rounded-circle align-self-stretch m-4" />
+            <MudStack Justify="Justify.Center" Class="ma-2">
+                <MudText Typo="Typo.body2"><b>Страна: </b>@Beer.Country</MudText>
+                <MudText Typo="Typo.body2"><b>Производитель: </b> @foreach(var manufacturer in Beer.Manufacturers)
+                {
+                        <MudText Align="Align.Center" Typo="Typo.button">
+                            <a Href=@($"/manufacturerdetails/{manufacturer.Id}")>@manufacturer.Name</a></MudText>
+                }
+                </MudText>
+                <MudText Typo="Typo.body2"><b>Стиль: </b> @foreach(var style in Beer.Styles)
+                {
+                        <MudText Align="Align.Center" Typo="Typo.button">
+                            <a Href=@($"/styledetails/{style.Id}")>@style.NameEn</a></MudText>
+                }
+                 </MudText>
+                <MudText Typo="Typo.body2"><b>Дата создания: </b> @(Beer.CreationTime ?? "неизвестно")</MudText>
+                </MudStack>
+            </MudStack>
+        </MudCardContent>
+    </MudCard>
+    @code {
+    [Parameter]
+    public BeerLabel Beer { get; set; } = default!;
+    [Parameter]
+    public bool CanEdit { get; set; }
+}

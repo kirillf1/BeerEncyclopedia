@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace BeerEncyclopedia.UI
+namespace BeerEncyclopedia.UI.Platforms.MacCatalyst
 {
     public class Program
     {

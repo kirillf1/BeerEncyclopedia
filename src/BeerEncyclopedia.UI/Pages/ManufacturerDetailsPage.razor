@@ -1,0 +1,45 @@
+﻿@page "/manufacturerdetails/{Id:guid}"
+@using BeerEncyclopedia.Application.Contracts.Manufacturers
+@using BeerEncyclopedia.Application.ManufacturerServices
+@using BeerEncyclopedia.UI.Shared.Beers
+@if (manufacturer != null)
+{
+    <MudGrid Class="m-4" Justify="Justify.FlexStart">
+        <MudItem sm="3">
+            <MudImage Height="150" Width="150" Src=@manufacturer.PictureUrl Alt="manufacturer" Elevation="25"
+                  Class="rounded-circle" />
+        </MudItem>
+        <MudItem>
+            <MudStack>
+                <MudText Typo="Typo.body1">@manufacturer.Name</MudText>
+                <MudText Typo="Typo.body2"><b>Страна: </b>@manufacturer.Country.Name</MudText>
+            </MudStack>
+        </MudItem>
+    </MudGrid>
+    <MudText Typo="Typo.body1"><b>Описание: </b>@(manufacturer.Description ?? "Описание еще не добавлено!")</MudText>
+    <MudText Class="my-3" Typo="Typo.h6"><b>Пиво:</b></MudText>
+    <MudGrid>
+        @foreach (var beer in manufacturer.Beers)
+        {
+            <MudItem Class="d-flex" sm="6" xs="12">
+                <BeerItem Beer="beer" />
+            </MudItem>
+        }
+    </MudGrid>
+}
+@code
+{
+    [Inject]
+    private IManufacturerSearchService manufacturerSearchService { get; set; } = default!;
+    [Parameter]
+    public Guid Id { get; set; }
+    private ManufacturerDetails manufacturer;
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await manufacturerSearchService.GetManufacturerDetails(Id, default);
+        if (result.IsSuccess)
+        {
+            manufacturer = result.Value;
+        }
+    }
+}

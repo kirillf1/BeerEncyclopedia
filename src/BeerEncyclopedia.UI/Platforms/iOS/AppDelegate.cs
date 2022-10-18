@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace BeerEncyclopedia.UI
+namespace BeerEncyclopedia.UI.Platforms.iOS
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

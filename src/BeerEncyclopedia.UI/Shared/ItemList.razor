@@ -1,0 +1,20 @@
+﻿@typeparam TItem
+
+@if (IsLoading)
+{
+    <div class="d-flex justify-center m-4">
+        <MudProgressCircular Style="height:150px;width:150px;" Color="Color.Default" Indeterminate="true" />
+    </div>
+}
+else
+{
+    <MudGrid>
+        @foreach (TItem item in Items)
+        {
+            <MudItem Class="d-flex" sm="6" xs="12">
+                @RowTemplate(item)
+            </MudItem>
+        }
+    </MudGrid>
+
+}

@@ -1,0 +1,29 @@
+﻿@page "/styles"
+@using BeerEncyclopedia.Application.Contracts.Styles
+@using BeerEncyclopedia.Application.StyleServices
+@using BeerEncyclopedia.UI.Shared.Styles
+
+<MudItem xs="6">
+    <MudText Align="Align.Left" Typo="Typo.h4">Стили</MudText>
+</MudItem>
+<MudGrid>
+@foreach (var style in Styles)
+{
+    <MudItem xs="6" sm="4" md="3" lg="2">
+    <StyleItem Style="style"/>
+    </MudItem>
+}
+</MudGrid>
+@code {
+    [Inject]
+    private IStyleSearchService StyleSearchService { get; set; } = default!;
+    private List<StyleLabel> Styles { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await StyleSearchService.SearchStyleLabel(
+            new StyleQuery { PageSize = int.MaxValue }, default);
+        if (result.IsSuccess)
+            Styles.AddRange(result.Value.Data);
+        StateHasChanged();
+    }
+}

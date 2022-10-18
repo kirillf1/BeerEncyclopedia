@@ -1,0 +1,45 @@
+﻿@using BeerEncyclopedia.Application.ColorServices
+@using BeerEncyclopedia.Application.Contracts.Colors
+
+<MudSelect @ref="MudSelect"  T="ColorDto" MultiSelection="EnableMultiSelect" ValueChanged="SelectedItem"
+           SelectedValuesChanged="SelectedItems"
+           Label="Цвет" Variant="Variant.Outlined">
+    @foreach (var item in Colors)
+    {
+        <MudSelectItem T="ColorDto" Value="item">
+            @item.Name
+        </MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Parameter]
+    public Guid? ColorId { get; set; }
+    [Parameter]
+    public Action<ColorDto>? ColorSelected { get; set; }
+    [Parameter]
+    public Action<IEnumerable<ColorDto>>? ColorsSelected { get; set; }
+    [Parameter]
+    public bool EnableMultiSelect { get; set; } = true;
+    [Inject]
+    private IColorSearchService colorSearchService { get; set; } = default!;
+    private MudSelect<ColorDto>? MudSelect { get; set; }
+    private List<ColorDto> Colors = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await colorSearchService.GetAllColors();
+        if (result.IsSuccess){
+            Colors.AddRange(result.Value);
+            if (ColorId.HasValue)
+                MudSelect.Value = Colors.FirstOrDefault(c => c.Id == ColorId);
+        }
+    }
+    private void SelectedItems(IEnumerable<ColorDto> selectItems)
+    { 
+        ColorsSelected?.Invoke(selectItems);
+    }
+    private void SelectedItem(ColorDto selectItem)
+    {
+        ColorSelected?.Invoke(selectItem);
+    }
+}

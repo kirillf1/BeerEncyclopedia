@@ -1,0 +1,30 @@
+﻿@using BeerEncyclopedia.Application.Contracts.Manufacturers
+<MudCard Class="flex-grow-1">
+    <MudCardContent>
+        @if (CanEdit)
+        {
+            <MudMenu Class="d-flex align-self-end" Icon="@Icons.Material.Filled.MoreVert">
+                <MudMenuItem>
+                    <MudFab Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit" />
+                </MudMenuItem>
+                <MudMenuItem>
+                    <MudFab Size="Size.Small" StartIcon="@Icons.Material.Filled.Delete" />
+                </MudMenuItem>
+            </MudMenu>
+        }
+        <MudStack Row="true">
+            <MudImage Height="150" Width="150" Src=@Manufacturer.PictureUrl Alt="Производитель" Elevation="25"
+                      Class="rounded-circle align-self-stretch m-4" />
+            <MudStack Justify="Justify.Center" Class="ma-2">
+                <MudText Align="Align.Center" Typo="Typo.button"><a Href=@($"/manufacturerDetails/{Manufacturer.Id}")>@Manufacturer.Name</a></MudText>
+                <MudText Typo="Typo.body2"><b>Страна: </b>@Manufacturer.Country.Name</MudText>
+            </MudStack>
+        </MudStack>
+    </MudCardContent>
+</MudCard>
+@code {
+    [Parameter]
+    public ManufacturerLabel Manufacturer { get; set; } = default!;
+    [Parameter]
+    public bool CanEdit { get; set; }
+}

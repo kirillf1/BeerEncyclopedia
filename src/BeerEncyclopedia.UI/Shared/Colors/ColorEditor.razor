@@ -1,0 +1,27 @@
+﻿@using BeerEncyclopedia.Application.Contracts.Colors
+<MudCard Class="flex-grow-1">
+    <MudCardHeader Class="align-content-end">
+    <CardHeaderActions >
+            <MudMenu Class="align-self-end" Icon="@Icons.Material.Filled.MoreVert">
+            <MudMenuItem>
+                <MudFab Size="Size.Small" Disabled="@(!isValid)" StartIcon="@Icons.Material.Filled.Update" />
+            </MudMenuItem>
+            <MudMenuItem>
+                <MudFab Size="Size.Small" StartIcon="@Icons.Material.Filled.Delete" />
+            </MudMenuItem>
+        </MudMenu>
+    </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudText Typo="Typo.body1"><b>Id: </b>@Color.Id</MudText>
+        <MudForm @bind-IsValid="isValid">
+            <MudTextField T="string" @bind-Value="Color.Name" Label="Name" Required="true" RequiredError="Color name is required!" />
+        </MudForm>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public ColorDto Color { get; set; } = default!;
+    private bool isValid;
+}

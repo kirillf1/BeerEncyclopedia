@@ -1,0 +1,41 @@
+﻿@using BeerEncyclopedia.Application.BeersServices.SearchServices
+@using BeerEncyclopedia.Application.Contracts.Beers
+@using BeerEncyclopedia.UI.Shared.Dialogs
+
+<InputFile id="fileInput" OnChange="SearchByImage" hidden capture />
+
+<MudButton HtmlTag="label"
+           Variant="Variant.Filled"
+           Color="Color.Primary"
+           StartIcon="@Icons.Filled.CloudUpload"
+           for="fileInput">
+    @Title
+</MudButton>
+
+@code {
+    [Inject]
+    private IDialogService DialogService { get; set; } = default!;
+    [Parameter]
+    public string Title { get; set; } = default!;
+    private List<BeerLabel> FoundedBeers = new();
+    private bool resultVisible;
+
+    private async Task SearchByImage(InputFileChangeEventArgs e)
+    {
+        FoundedBeers.Clear();
+        resultVisible = true;
+        StateHasChanged();
+        var input = e.File.OpenReadStream(10485760);
+        using MemoryStream ms = new MemoryStream();
+        await input.CopyToAsync(ms);
+        var parameters = new DialogParameters();
+        parameters.Add("Bytes", ms.ToArray());
+        DialogOptions dialogOptions = new DialogOptions(){ DisableBackdropClick = true, CloseOnEscapeKey = true, CloseButton = true };
+        DialogService.Show<ImageResultDialog>("Возможно это", parameters,dialogOptions);
+
+    }
+    private void Switch()
+    {
+        resultVisible = !resultVisible;
+    }
+}

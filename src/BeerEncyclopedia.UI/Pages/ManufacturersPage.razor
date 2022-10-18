@@ -1,0 +1,35 @@
+﻿@page "/manufacturers"
+@using BeerEncyclopedia.UI.Shared.Countries
+@using BeerEncyclopedia.UI.Shared.Manufacturers
+<ItemSearchDrawer IsOpened="@isDrawerOpened" SearchClicked="()=>LoadManufacturers(1)" RefreshClicked="()=> RefreshQuery()">
+    <SearchElements>
+        <MudStack Class="m-3">
+                <MudTextField T="string" Label="Название пива" @bind-Value="ManufacturerQuery.Name"
+                              HelperTextOnFocus="true"
+                              Variant="Variant.Outlined" />
+                
+                <CountrySelect CountryIds="ManufacturerQuery.CountriesId" EnableMultiSelect="true"/>
+            </MudStack>
+    </SearchElements>
+</ItemSearchDrawer>
+<MudGrid Class="mt-2" Justify="Justify.SpaceBetween">
+    <MudItem xs="6">
+        <MudText Align="Align.Left" Typo="Typo.h4">Производители</MudText>
+    </MudItem>
+    <MudItem Class="d-flex justify-end" xs="6">
+        <MudFab EndIcon="@Icons.Filled.ArrowRight" Label="Поиск"
+                OnClick="()=>isDrawerOpened = true" />
+    </MudItem>
+</MudGrid>
+<ItemList Items="Manufacturers"  IsLoading="@IsLoading">
+          <RowTemplate Context="manufacturer">
+        <ManufacturerItem Manufacturer="manufacturer" />
+    </RowTemplate>
+    </ItemList>
+<div class="d-flex justify-center m-4">
+    <MudPagination Disabled="IsLoading" ShowFirstButton="true"
+                   ShowLastButton="true"
+                   BoundaryCount="2"
+                   Selected="@(ManufacturerQuery.PageIndex +1)"
+                   MiddleCount="5" Count="@PageCount" SelectedChanged="LoadManufacturers" />
+</div>

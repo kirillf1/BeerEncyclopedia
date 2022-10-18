@@ -1,0 +1,12 @@
+﻿@using BeerEncyclopedia.Application.Contracts.Manufacturers
+
+<MudSelect @ref="MudSelect" T="ManufacturerLabel" MultiSelection="EnableMultiSelect"
+           ValueChanged="SelectedItem" SelectedValuesChanged="SelectedItems" ToStringFunc="(m)=>m?.Name ?? null" 
+           Label="Производители" Variant="Variant.Outlined">
+    @foreach(var item in Manufacturers)
+    {
+        <MudSelectItem T="ManufacturerLabel"  Value="item">
+            <img src="@GetCountryImage(item.Country)" height="14" alt="?"/> @item.Name
+        </MudSelectItem>
+    }
+</MudSelect>

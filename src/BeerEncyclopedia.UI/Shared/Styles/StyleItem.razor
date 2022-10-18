@@ -1,0 +1,28 @@
+﻿@using BeerEncyclopedia.Application.Contracts.Styles
+
+<MudCard Class="flex-grow-1" Style="height:200px" Width="200px">
+    <MudCardActions>
+     @if (CanEdit)
+        {
+            <MudMenu Class="d-flex align-self-end" Icon="@Icons.Material.Filled.MoreVert">
+                <MudMenuItem>
+                    <MudFab Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit" />
+                </MudMenuItem>
+                <MudMenuItem>
+                    <MudFab Size="Size.Small" StartIcon="@Icons.Material.Filled.Delete" />
+                </MudMenuItem>
+            </MudMenu>
+        }
+        </MudCardActions>
+   <MudCardContent Class="align-self-center">
+        <MudText Typo="Typo.body1" Align="Align.Center"><a Href=@($"/styledetails/{Style.Id}")>@Style.NameEn</a> </MudText>
+    <MudText Typo="Typo.body2" Align="Align.Center">@Style.NameRus</MudText>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public StyleLabel Style { get; set; } = default!;
+    [Parameter]
+    public bool CanEdit { get; set; }
+}

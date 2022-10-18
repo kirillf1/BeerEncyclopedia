@@ -1,0 +1,15 @@
+﻿<MudTooltip Arrow="true" Placement="Placement.Right">
+    <ChildContent>
+        <MudBadge Bordered="true" Icon="@Icons.Filled.Info">
+        <MudText Typo="Typo.body1"><b>ABV: </b> @(Alcohol)</MudText>
+            </MudBadge>
+        </ChildContent>
+        <TooltipContent>
+        <MudText Typo="Typo.caption">ALCOHOL BY VOLUME — объемная доля спирта в пиве</MudText>
+
+        </TooltipContent>
+    </MudTooltip>
+    @code {
+    [Parameter]
+    public double Alcohol { get; set; }
+}

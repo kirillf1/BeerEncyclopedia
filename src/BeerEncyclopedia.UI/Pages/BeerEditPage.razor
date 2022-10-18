@@ -1,0 +1,152 @@
+﻿@page "/beeredit/{Id:guid}"
+@page "/beeredit"
+@using BeerEncyclopedia.Application.BeersServices.EditorServices
+@using BeerEncyclopedia.Application.BeersServices.SearchServices
+@using BeerEncyclopedia.Application.Contracts.Beers
+@using BeerEncyclopedia.Application.Contracts.Colors
+@using BeerEncyclopedia.Application.Contracts.Countries
+@using BeerEncyclopedia.Application.Contracts.Manufacturers
+@using BeerEncyclopedia.Application.Contracts.Styles
+@using BeerEncyclopedia.UI.Shared.Colors
+@using BeerEncyclopedia.UI.Shared.Countries
+@using BeerEncyclopedia.UI.Shared.Manufacturers
+@using BeerEncyclopedia.UI.Shared.Styles
+@using System.Globalization
+
+<MudText Typo="Typo.h3">Изменить пиво</MudText>
+<MudButton OnClick="SaveChanges">Сохранить</MudButton>
+@if (Beer is not null)
+{
+    <MudForm>
+        <MudGrid Class="m-4" Justify="Justify.FlexStart">
+            <MudItem sm="3">
+                <MudImage Height="150" Width="150" Src=@Beer.MainImageUrl Alt="beer" Elevation="25"
+                      Class="rounded-circle" />
+            </MudItem>
+            <MudItem sm="9">
+                <MudGrid Justify="Justify.FlexStart">
+                    <MudItem md="5">
+                        <MudTextField Variant="Variant.Outlined" @bind-Value="Beer.Name" Label="Имя"></MudTextField>
+                    </MudItem>
+                    <MudItem md="5">
+                        <MudTextField Variant="Variant.Outlined" @bind-Value="Beer.AltName" Label="Доп. имя"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudExpansionPanels>
+                            <MudExpansionPanel Text="Изменить фото ">
+                                <MudTextField Variant="Variant.Outlined" @bind-Value="Beer.MainImageUrl" Label="Основное фото"></MudTextField>
+                                <MudButton OnClick="()=>Beer.AdditionalImages.Add(string.Empty)">Добавить</MudButton>
+                                @for (int i = 0; i < Beer.AdditionalImages.Count; i++)
+                                {
+                                    var index = i;
+                                    <MudStack Row="true">
+                                        <MudTextField Variant="Variant.Outlined" @bind-Value="Beer.AdditionalImages[index]" Label="Фото" />
+                                        <MudFab Size="Size.Small" OnClick="()=>Beer.AdditionalImages.RemoveAt(index)"
+                                        Icon="@Icons.Filled.Delete" />
+                                    </MudStack>
+                                }
+                            </MudExpansionPanel>
+                        </MudExpansionPanels>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Justify="Justify.SpaceBetween">
+            <MudItem xs="6" md="4" lg="2">
+                <MudNumericField Variant="Variant.Outlined" Min="0" Max="5" Label="Рейтинг" @bind-Value="Beer.Rating" />
+            </MudItem>
+            <MudItem xs="6" md="4" lg="2">
+                <MudNumericField Variant="Variant.Outlined" Min="0" Label="Алкоголь%" @bind-Value="Beer.Strength" />
+            </MudItem>
+            <MudItem xs="6" md="4" lg="2">
+                <MudNumericField Variant="Variant.Outlined" Min="0" Max="100" Label="Коэф. горечи" @bind-Value="Beer.Bitterness" />
+            </MudItem>
+            <MudItem xs="6" md="4" lg="2">
+                <MudNumericField Variant="Variant.Outlined" Min="0" Max="100" Label="Экстрактивность сусла" @bind-Value="Beer.InitialWort" />
+            </MudItem>
+            <MudItem xs="6" md="4">
+                <CountrySelect CountryIds="new List<Guid>{Beer.Country.Id}" EnableMultiSelect="false" CountrySelected="CountrySelected" />
+            </MudItem>
+            <MudItem xs="6" md="4" >
+                <StyleSelect StyleIds="Beer.Styles.Select(c=>c.Id).ToList()" 
+                    StylesSelected="StylesSelected" EnableMultiSelect="true" />
+            </MudItem>
+            <MudItem xs="6" md="4" >
+                <ColorSelect ColorId="Beer.Color.Id"  EnableMultiSelect="false" ColorSelected="ColorSelected" />
+            </MudItem>
+            <MudItem xs="6" md="4">
+                <ManufacturerSelect ManufacturerIds="Beer.Manufacturers.Select(c=>c.Id).ToList()" 
+                ManufacturersSelected="ManufacturersSelected" EnableMultiSelect="true"/>
+            </MudItem>
+            <MudItem xs="6" md="4" lg="2">
+               <MudSwitch T="bool" @bind-Checked="Beer.Pasteurization" Label="Пастеризация" />
+            </MudItem>
+            <MudItem xs="6" md="4" lg="2">
+               <MudSwitch T="bool" @bind-Checked="Beer.Filtration" Label="Фильтрация" />
+            </MudItem>
+            <MudItem xs="6" md="4">
+                <MudDatePicker OpenTo="OpenTo.Month" Label="Дата создания" Culture="@CultureInfo.GetCultureInfo("ru-RU")" DateChanged="DateChanged"/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="Beer.Description" Label="Описание" Lines="10" />
+            </MudItem>
+             <MudItem xs="12">
+                <MudTextField @bind-Value="Beer.Taste" Label="Вкус и аромат" Lines="10" />
+            </MudItem>
+        </MudGrid>
+    </MudForm>
+}
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+    [Inject]
+    private IBeerSearchByIdService beerSearchByIdService { get; set; } = default!;
+    [Inject]
+    private IBeerEditorService editorService { get; set; } = default!;
+    private BeerDetails Beer = default!;
+    private void CountrySelected(CountryDto country) => Beer.Country = country;
+    private void ColorSelected(ColorDto color) => Beer.Color = color;
+    private void StylesSelected(IEnumerable<StyleLabel> styles)
+    {
+        Beer.Styles.Clear();
+        Beer.Styles.AddRange(styles);
+    }
+    private void ManufacturersSelected(IEnumerable<ManufacturerLabel> manufacturers)
+    {
+        Beer.Manufacturers.Clear();
+        Beer.Manufacturers.AddRange(manufacturers);
+    }
+    private void DateChanged(DateTime? date) => Beer.CreationTime = date?.ToShortDateString();
+    private async Task SaveChanges()
+    {
+        Ardalis.Result.Result result;
+        if (Id.HasValue)
+            result = await editorService.UpdateBeer(Beer);
+        else
+            result = await editorService.AddBeer(Beer);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            var result = await beerSearchByIdService.GetBeerDetailsAsync(Id.Value, default);
+            if (result.IsSuccess)
+                Beer = result.Value;
+        }
+        else
+        {
+            Beer = new BeerDetails()
+                {
+                    MainImageUrl = "",
+                    AdditionalImages = new(),
+                    Id = Guid.NewGuid(),
+                    Styles = new List<Application.Contracts.Styles.StyleLabel>(),
+                    Manufacturers = new List<Application.Contracts.Manufacturers.ManufacturerLabel>(),
+                    Color = new ColorDto(),
+                    Country = new CountryDto()                   
+                };
+
+        }
+        StateHasChanged();
+    }
+}

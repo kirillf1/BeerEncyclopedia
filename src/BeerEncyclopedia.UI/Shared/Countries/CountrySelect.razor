@@ -1,0 +1,10 @@
+﻿@using BeerEncyclopedia.Application.Contracts.Countries
+<MudSelect @ref="MudSelect" T="CountryDto" MultiSelection="EnableMultiSelect"
+           SelectedValuesChanged="SelectedItems" ValueChanged="SelectedItem" ToStringFunc="(m)=>m?.Name ?? null" 
+           Label="Страны" Variant="Variant.Outlined">
+    @foreach(var item in Countries)
+    {
+        <MudSelectItem T="CountryDto"  Value="item">@item.Name
+        </MudSelectItem>
+    }
+</MudSelect>

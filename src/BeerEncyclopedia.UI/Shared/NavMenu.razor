@@ -1,30 +1,10 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="">BeerEncyclopedia.UI</a>
-		<button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-	</div>
-</div>
+﻿@using MudBlazor
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-	<nav class="flex-column">
-		<div class="nav-item px-3">
-			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-				<span class="oi oi-home" aria-hidden="true"></span> Home
-			</NavLink>
-		</div>
-		
-	</nav>
-</div>
-
-@code {
-	private bool collapseNavMenu = true;
-
-	private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-	private void ToggleNavMenu()
-	{
-		collapseNavMenu = !collapseNavMenu;
-	}
-}
+<MudNavMenu>
+    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+    <MudNavLink Href="/beers"  Match="NavLinkMatch.Prefix">Пиво</MudNavLink>
+    <MudNavLink Href="/manufacturers"  Match="NavLinkMatch.Prefix">Производители</MudNavLink>
+    <MudNavLink Href="/styles" Match="NavLinkMatch.Prefix">Стили</MudNavLink>
+    <MudNavLink Href="/countriesedit" Match="NavLinkMatch.Prefix">Страны</MudNavLink>
+    <MudNavLink Href="/colorsedit" Match="NavLinkMatch.Prefix">Цвета</MudNavLink>
+</MudNavMenu>

@@ -1,0 +1,50 @@
+﻿<div class="d-flex justify-content-center">
+    <MudCarousel @bind-SelectedIndex="currentImageIndex" AutoCycle="false"
+    ShowBullets="false" Class="d-flex justify-content-center" Style="height:300px; width:300px;" TData="string"
+                 ItemsSource="ImageUrls">
+        <ItemTemplate>
+            <div class="d-flex justify-center flex-grow-1 gap-4" style="height:100%">
+                <MudImage ObjectFit="ObjectFit.ScaleDown" @onclick="ChangeVisibility" class="center-block img-responsive"
+                          ObjectPosition="ObjectPosition.Center" Height="300" Width="300" Src="@context"></MudImage>
+            </div>
+        </ItemTemplate>
+    </MudCarousel>
+</div>
+<MudOverlay Absolute="false" AutoClose="true" Visible="isVisible" DarkBackground="true">
+    <div class="d-flex align-self-start justify-end z-20">
+        <MudIconButton Style="@($"color:{Colors.Grey.Lighten5};")" Icon="@Icons.Filled.Close" Size="Size.Large" />
+    </div>
+    <MudGrid Class="py-4 mud-width-full" Justify="Justify.SpaceBetween">
+        <MudItem xs="2" Class="d-flex justify-content-start align-center">
+            <MudIconButton OnClick="ScrollBefore" Style="@($"color:{Colors.Grey.Lighten5};")" Icon="@Icons.Filled.ChevronLeft" Size="Size.Large"
+                           Class="z-10 align-self-center"></MudIconButton>
+        </MudItem>
+        <MudItem xs="8" Class="d-flex align-content-end">
+            <MudImage Style="position:relative" Fluid="true" ObjectFit="ObjectFit.ScaleDown" Src="@GetCurrentImage()">
+            </MudImage>
+        </MudItem>
+        <MudItem xs="2" Class="d-flex justify-content-end">
+            <MudIconButton OnClick="ScrollNext" Style="@($"color:{Colors.Grey.Lighten5};")" Icon="@Icons.Filled.ChevronRight" Size="Size.Large"
+                           Class="z-10 align-self-center"></MudIconButton>
+        </MudItem>
+    </MudGrid>
+</MudOverlay>
+
+@code {
+    [Parameter]
+    public List<string> ImageUrls { get; set; } = default!;
+    private void ScrollNext() => currentImageIndex = currentImageIndex == ImageUrls.Count - 1 ? 0 : ++currentImageIndex;
+    private void ScrollBefore() => currentImageIndex = currentImageIndex == 0 ? ImageUrls.Count -1  : --currentImageIndex;
+    private string GetCurrentImage()
+    {
+        if (currentImageIndex >= ImageUrls.Count || currentImageIndex < 0)
+            return "";
+        return ImageUrls[currentImageIndex];
+    }
+    private int currentImageIndex = 0;
+    private bool isVisible;
+    private void ChangeVisibility()
+    {
+        isVisible = !isVisible;
+    }
+}

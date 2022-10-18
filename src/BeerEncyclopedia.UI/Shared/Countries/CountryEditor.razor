@@ -1,0 +1,29 @@
+﻿@using BeerEncyclopedia.Application.Contracts.Countries
+
+<MudCard Class="flex-grow-1">
+    <MudCardHeader Class="align-content-end">
+    <CardHeaderActions >
+            <MudMenu Class="align-self-end" Icon="@Icons.Material.Filled.MoreVert">
+            <MudMenuItem>
+                <MudFab Size="Size.Small" Disabled="@(!isValid)" StartIcon="@Icons.Material.Filled.Update" />
+            </MudMenuItem>
+            <MudMenuItem>
+                <MudFab Size="Size.Small" StartIcon="@Icons.Material.Filled.Delete" />
+            </MudMenuItem>
+        </MudMenu>
+    </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudText Typo="Typo.body1"><b>Id: </b>@Country.Id</MudText>
+        <MudForm @bind-IsValid="isValid">
+            <MudTextField T="string" @bind-Value="Country.Name" Label="Name" Required="true" RequiredError="Country name is required!" />
+            <MudTextField T="string" @bind-Value="Country.Alpha2" Label="Alpha2" Required="true" RequiredError="Alpha is required!" />
+        </MudForm>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public CountryDto Country { get; set; } = default!;
+    private bool isValid;
+}
