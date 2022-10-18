@@ -19,4 +19,8 @@
     <ProjectReference Include="..\BeerShared\BeerShared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ManufacturerServices\EditorServices\" />
+  </ItemGroup>
+
 </Project>
