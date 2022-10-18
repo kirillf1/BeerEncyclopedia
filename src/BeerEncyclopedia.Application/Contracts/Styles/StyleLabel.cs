@@ -3,7 +3,8 @@
     public class StyleLabel
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = default!;
+        public string NameEn { get; set; } = default!;
+        public string? NameRus { get; set; } = default!;
         public override int GetHashCode()
         {
             return Id.GetHashCode();
