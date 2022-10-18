@@ -90,24 +90,6 @@ namespace BeerEncyclopedia.Application.Helpers
                 }
                 return str;
             }).Where(c=> !string.IsNullOrEmpty(c)));
-            //foreach (var property in properties)
-            //{
-            //    if (property.Value is not string && property.Value is ICollection)
-            //    {
-            //        var valueType = properties.GetType();
-            //        var valueElemType = valueType.IsGenericType
-            //                                ? valueType.GetGenericArguments()[0]
-            //                                : valueType.GetElementType();
-            //        var collection = property.Value as ICollection;
-            //        if (collection != null && collection.Count > 0)
-            //            stringBuilder.Append( collection.Cast<object>().Select(c=> (isFirstAdd ? "" : "&") +$"{property.Key}={c}"));
-            //    }
-            //    else
-            //    {
-            //       stringBuilder.Append((isFirstAdd ? "" : "&") + $"{property.Key}={property.Value}");
-            //    }
-            //    isFirstAdd = false;
-            //}
             return new Uri(stringBuilder.ToString());
         }
     }
