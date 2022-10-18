@@ -39,7 +39,7 @@ namespace BeerEncyclopedia.Application.StyleServices
         {
             try
             {
-                var specification = new EntityByIdSpec<Style, StyleDetails>(id, s => StyleDtoConverter.ConvertStyleToDetails(s));
+                var specification = new StylesDetailsByIdSpec(id, 10);
                 var style = await repository.FirstOrDefaultAsync(specification, cancellationToken);
                 if (style == null)
                     return Result.NotFound();
